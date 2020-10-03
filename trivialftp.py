@@ -118,6 +118,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         else:
             if send(s, args, bytes(data_msg), inbox):
                 break
+    file.close()
 
 
 if __name__ == '__main__':
