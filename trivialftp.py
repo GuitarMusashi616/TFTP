@@ -63,7 +63,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         else:
             # resend last ack
             ack_msg = AckMessage(bytes_to_short(received[2], received[3]))
-            if send(s, args, ack_msg, inbox):
+            if send(s, args, bytes(ack_msg), inbox):
                 break
     f.close()
 
