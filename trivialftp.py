@@ -21,7 +21,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
 
     # make / send read request
     rrq_msg = ReadRequest(args.filename, 'netascii')
-    send(s, args, rrq_msg, inbox)
+    send(s, args, bytes(rrq_msg), inbox)
 
     # setup file to write to
     while os.path.exists(args.filename):
@@ -41,16 +41,16 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
             # save contents
             f.write(received[4:])
 
-            ack_msg = ACK + received[2:4]
+            ack_msg = AckMessage(bytes_to_short(received[2], received[3]))
 
             # if data length less than 512 bytes then stop otherwise loop
             if len(received) < 516:
                 print("sending only once")
-                send_only_once(s, args, ack_msg)
+                send_only_once(s, args, bytes(ack_msg))
                 break
 
             # send ack
-            if send(s, args, ack_msg, inbox):
+            if send(s, args, bytes(ack_msg), inbox):
                 break
 
             # increment block_num
@@ -62,7 +62,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
 
         else:
             # resend last ack
-            ack_msg = ACK + received[2:4]
+            ack_msg = AckMessage(bytes_to_short(received[2], received[3]))
             if send(s, args, ack_msg, inbox):
                 break
     f.close()
@@ -86,7 +86,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
 
     # make / send write request
     wrq_msg = WriteRequest(args.filename, 'netascii')
-    send(s, args, wrq_msg, inbox)
+    send(s, args, bytes(wrq_msg), inbox)
 
     # wait for acks while sending data
     block_num = 0
@@ -101,11 +101,12 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         # if message is ACK
         if msg and msg[0:2] == ACK and bytes_to_short(msg[2], msg[3]) == block_num:
             block_num = (block_num + 1) % 65536
-            data_msg = DATA + short_to_bytes(block_num) + data_bytes
+            data_msg = DataMessage(block_num, data_bytes)
+
             if len(data_bytes) < 512:
-                send_only_once(s, args, data_msg)
+                send_only_once(s, args, bytes(data_msg))
                 break
-            if send(s, args, data_msg, inbox):
+            if send(s, args, bytes(data_msg), inbox):
                 break
             data_bytes = file.read(512)
 
@@ -115,7 +116,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
 
         # otherwise resend last data msg
         else:
-            if send(s, args, data_msg, inbox):
+            if send(s, args, bytes(data_msg), inbox):
                 break
 
 

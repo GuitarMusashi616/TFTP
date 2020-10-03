@@ -2,7 +2,8 @@ from shared import *
 
 
 class Message:
-    def __init__(self, opcode):
+    """Abstract class for all message instances"""
+    def __init__(self, opcode: int):
         assert 1 <= opcode <= 5, 'opcode must be between 1-5'
         self.opcode = opcode
 
@@ -11,7 +12,8 @@ class Message:
 
 
 class ReadRequest(Message):
-    def __init__(self, filename, mode):
+    """Used to quickly construct a read request"""
+    def __init__(self, filename: str, mode: str):
         super().__init__(1)
         self.filename = filename
         self.mode = mode
@@ -21,7 +23,8 @@ class ReadRequest(Message):
 
 
 class WriteRequest(Message):
-    def __init__(self, filename, mode):
+    """Used to quickly construct a write request"""
+    def __init__(self, filename: str, mode: str):
         super().__init__(2)
         self.filename = filename
         self.mode = mode
@@ -31,7 +34,8 @@ class WriteRequest(Message):
 
 
 class DataMessage(Message):
-    def __init__(self, block_num, content):
+    """Used to quickly construct a data message"""
+    def __init__(self, block_num: int, content: bytes):
         super().__init__(3)
         self.block_num = block_num
         self.content = content
@@ -41,7 +45,8 @@ class DataMessage(Message):
 
 
 class AckMessage(Message):
-    def __init__(self, block_num):
+    """Used to quickly construct an ack message"""
+    def __init__(self, block_num: int):
         super().__init__(4)
         self.block_num = block_num
 
@@ -50,7 +55,8 @@ class AckMessage(Message):
 
 
 class ErrorMessage(Message):
-    def __init__(self, error_code, error_msg):
+    """Used to quickly construct an error request"""
+    def __init__(self, error_code: int, error_msg: str):
         super().__init__(5)
         self.error_code = error_code
         self.error_msg = error_msg
