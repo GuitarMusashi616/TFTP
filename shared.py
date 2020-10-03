@@ -4,7 +4,7 @@
 # 2 October 2020
 
 # shared.py
-# library that is utilized by server and client
+# module that is utilized by both server and client
 
 import argparse
 import re

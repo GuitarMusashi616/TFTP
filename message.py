@@ -1,3 +1,11 @@
+# Austin Williams
+# Shawn Butler
+# Computer Networks
+# 2 October 2020
+
+# message.py
+# module to create Message objects used to send to server
+
 from shared import *
 
 

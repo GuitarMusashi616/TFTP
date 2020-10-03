@@ -3,6 +3,9 @@
 # Computer Networks
 # 2 October 2020
 
+# trivialftp.py
+# main program used to download and upload files to a tftp server
+
 import socket
 from shared import *
 from message import *
@@ -10,8 +13,11 @@ import os
 from multithreaded import send, send_only_once
 
 
-def is_legit(msg):
-    """Returns True if msg is legitimate (no wrong opcode etc)"""
+def is_legit(msg: bytes) -> bool:
+    """Returns True if msg is legitimate (no wrong opcode etc)
+
+    :param msg: The bytes that are sent from the server
+    """
     try:
         assert msg[0] == 0 and 1 <= msg[1] <= 5, 'opcode must be between 1-5'
 
@@ -29,13 +35,16 @@ def is_legit(msg):
             assert msg[2] == 0 and 0 <= msg[3] <= 7
             assert list(msg[4:]).count(0) == 1
 
-    except AssertionError as e:
+    except AssertionError:
         return False
     return True
 
 
-def read_error(error_msg):
-    """Used to print the received server error message"""
+def read_error(error_msg: bytes):
+    """Used to print the received server error message
+
+    :param error_msg: bytes sent from the server whose opcode is 5
+    """
     if is_legit(error_msg):
         if error_msg[2:4] == Error.NOT_DEFINED:
             print("Server Error: Undefined")

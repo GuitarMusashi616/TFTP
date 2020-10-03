@@ -3,6 +3,9 @@
 # Computer Networks
 # 2 October 2020
 
+# multithreaded.py
+# module used to send multiple messages while receiving messages at the same time
+
 
 from shared import *
 import socket
