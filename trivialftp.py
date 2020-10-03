@@ -28,7 +28,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         args.filename = increment_filename(args.filename)
 
     f = open(args.filename, "wb")
-    f = open("messages.txt", "a")
+    g = open("messages.txt", "a")
 
 
     block_num = 1
@@ -67,7 +67,8 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
             ack_msg = AckMessage(bytes_to_short(received[2], received[3]))
             if send(s, args, bytes(ack_msg), inbox):
                 break
-    f.write("\n\n")
+    g.write("\n\n")
+    g.close()
     f.close()
 
 
