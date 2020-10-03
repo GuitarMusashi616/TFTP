@@ -119,7 +119,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         elif received and received[0:2] == ERROR:
             # handle errors
             read_error(received)
-            raise Error()
+            break
 
         else:
             # resend last ack
@@ -174,7 +174,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         # if msg is error then Error
         elif msg and msg[0:2] == ERROR:
             read_error(msg)
-            raise Error()
+            break
 
         # otherwise resend last data msg
         else:
