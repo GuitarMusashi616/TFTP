@@ -37,6 +37,8 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         # wait for response, try 3 times, if timeout try again
         if inbox:
             received = inbox.pop(0)
+            g.write(str(received))
+            g.write('\n')
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
         if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
@@ -102,6 +104,8 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         # pop latest message
         if inbox:
             msg = inbox.pop(0)
+            f.write(str(msg))
+            f.write('\n')
 
         # if msg is ack then send next data packet
         if msg and msg[0:2] == ACK and bytes_to_short(msg[2], msg[3]) == block_num:
