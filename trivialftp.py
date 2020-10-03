@@ -10,6 +10,57 @@ import os
 from multithreaded import send, send_only_once
 
 
+def is_legit(msg):
+    """Returns True if msg is legitimate (no wrong opcode etc)"""
+    try:
+        assert msg[0] == 0 and 1 <= msg[1] <= 5, 'opcode must be between 1-5'
+
+        if msg[0:2] == RRQ or msg[0:2] == WRQ:
+            assert list(msg[2:]).count(0) == 2
+            assert msg[-10:0] == b'\x00netascii\x00'
+
+        if msg[0:2] == DATA:
+            assert len(msg) <= 516
+
+        if msg[0:2] == ACK:
+            assert len(msg) == 4
+
+        if msg[0:2] == ERROR:
+            assert msg[2] == 0 and 0 <= msg[3] <= 7
+            assert list(msg[4:]).count(0) == 1
+
+    except AssertionError as e:
+        return False
+    return True
+
+
+def read_error(error_msg):
+    """Used to print the received server error message"""
+    if is_legit(error_msg):
+        if error_msg[2:4] == Error.NOT_DEFINED:
+            print("Server Error: Undefined")
+        elif error_msg[2:4] == Error.FILE_NOT_FOUND:
+            print("Server Error: File Not Found")
+        elif error_msg[2:4] == Error.ACCESS_VIOLATION:
+            print("Server Error: Access Violation")
+        elif error_msg[2:4] == Error.DISK_FULL:
+            print("Server Error: Disk Full")
+        elif error_msg[2:4] == Error.ILLEGAL_OPERATION:
+            print("Server Error: Illegal Operation")
+        elif error_msg[2:4] == Error.UNKNOWN_TID:
+            print("Server Error: Unknown Transfer ID")
+        elif error_msg[2:4] == Error.FILE_EXISTS:
+            print("Server Error: File Exists")
+        elif error_msg[2:4] == Error.NO_SUCH_USER:
+            print("Server Error: No Such User")
+        string = extract_null_terminated_string(error_msg, 4)
+        if string:
+            print("Error Message: ", end='')
+            print(string)
+    else:
+        print("Unreadable Server Error")
+
+
 def download(s: socket.socket, args: argparse.Namespace) -> None:
     """Initiates a read request, records incoming data and responds with acks until file is constructed
 
@@ -58,6 +109,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
 
         elif received and received[0:2] == ERROR:
             # handle errors
+            read_error(received)
             raise Error()
 
         else:
@@ -112,6 +164,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
 
         # if msg is error then Error
         elif msg and msg[0:2] == ERROR:
+            read_error(msg)
             raise Error()
 
         # otherwise resend last data msg
