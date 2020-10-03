@@ -34,18 +34,18 @@ def setup_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='send files reliably over UDP')
 
     parser.add_argument('-a', action='store', dest='ip',
-                        help='specify ip address')
+                        help='specify ip address', required=True)
 
     parser.add_argument('-sp', action='store', dest='server_port', type=within_port_numbers,
-                    help='specify server port number')
+                    help='specify server port number', required=True)
 
     parser.add_argument('-f', action='store', dest='filename',
-                        help='specify name of file to download / upload')
+                        help='specify name of file to download / upload', required=True)
 
     parser.add_argument('-p', action='store', dest='port', type=within_port_numbers,
-                        help='specify port number')
+                        help='specify port number', required=True)
 
-    parser.add_argument('-m', action='store', dest='mode',
+    parser.add_argument('-m', action='store', dest='mode', required=True, choices=['r', 'w'],
                         help='r = read from server, w = write to server')
 
     return parser.parse_args()
@@ -61,7 +61,7 @@ def within_port_numbers(string: str) -> int:
     except ValueError:
         raise ValueError("port/server_port must be an integer")
 
-    if value < 5000:
+    if value < 5000 or value > 65535:
         raise ValueError("port/server_port must be a value higher than 5000")
     return value
 

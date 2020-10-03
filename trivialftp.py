@@ -98,7 +98,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         if inbox:
             msg = inbox.pop(0)
 
-        # if message is ACK
+        # if msg is ack then send next data packet
         if msg and msg[0:2] == ACK and bytes_to_short(msg[2], msg[3]) == block_num:
             block_num = (block_num + 1) % 65536
             data_msg = DataMessage(block_num, data_bytes)
@@ -110,7 +110,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
                 break
             data_bytes = file.read(512)
 
-        # else if msg is ERROR
+        # if msg is error then Error
         elif msg and msg[0:2] == ERROR:
             raise Error()
 
