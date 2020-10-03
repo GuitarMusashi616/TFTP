@@ -28,6 +28,8 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         args.filename = increment_filename(args.filename)
 
     f = open(args.filename, "wb")
+    f = open("messages.txt", "a")
+
 
     block_num = 1
     received = None
@@ -65,6 +67,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
             ack_msg = AckMessage(bytes_to_short(received[2], received[3]))
             if send(s, args, bytes(ack_msg), inbox):
                 break
+    f.write("\n\n")
     f.close()
 
 
@@ -77,6 +80,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     # setup incoming messages
     inbox = []
 
+    f = open("messages.txt", "a")
     # find file from args.filename
     file = None
     try:
@@ -118,6 +122,9 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         else:
             if send(s, args, bytes(data_msg), inbox):
                 break
+    file.close()
+    f.write("\n\n")
+    f.close()
 
 
 if __name__ == '__main__':
