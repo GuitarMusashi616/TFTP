@@ -20,7 +20,7 @@ def wait_for_clients():
     # process if read request
     if msg[0:2] == RRQ:
         # input 01filename0, extract filename -> filename
-        filename = extract_filename(msg)
+        filename = extract_null_terminated_string(msg)
         print(filename)
         file = None
         try:

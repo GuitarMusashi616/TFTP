@@ -66,21 +66,21 @@ def within_port_numbers(string: str) -> int:
     return value
 
 
-def extract_filename(byte_msg, str_start=2):
+def extract_null_terminated_string(byte_msg: bytes, str_start: int = 2) -> str:
     """Extracts a null terminated string from bytes
 
     :param byte_msg: a bytes type with a bunch of ascii char bytes followed by a null byte
     :param str_start: which byte index to start searching on
     """
-    filename = ''
+    string = ''
     for byte in byte_msg[str_start:]:
         if byte == 0:
             break
-        filename += chr(byte)
-    return filename
+        string += chr(byte)
+    return string
 
 
-def short_to_bytes(short):
+def short_to_bytes(short: int):
     """Takes a number between 0 and 65535 and returns a 2 byte representation
 
     :param short: integer between 0-65535
