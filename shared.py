@@ -1,3 +1,11 @@
+# Austin Williams
+# Shawn Butler
+# Computer Networks
+# 2 October 2020
+
+# shared.py
+# library that is utilized by server and client
+
 import argparse
 import re
 
@@ -10,6 +18,7 @@ NULL = b'\x00'
 
 
 class Error:
+    """Used to compare error codes in bytes"""
     NOT_DEFINED = b'\x00\x00'
     FILE_NOT_FOUND = b'\x00\x01'
     ACCESS_VIOLATION = b'\x00\x02'
@@ -20,7 +29,8 @@ class Error:
     NO_SUCH_USER = b'\x00\x07'
 
 
-def setup_args():
+def setup_args() -> argparse.Namespace:
+    """Utilizes argparser to setup and return arguments"""
     parser = argparse.ArgumentParser(description='send files reliably over UDP')
 
     parser.add_argument('-a', action='store', dest='ip',
@@ -41,7 +51,10 @@ def setup_args():
     return parser.parse_args()
 
 
-def within_port_numbers(string):
+def within_port_numbers(string: str) -> int:
+    """Used within argparser to filter out the port and server_port arguments
+
+    :param string: The string representation of the port or server_port argument"""
     value = None
     try:
         value = int(string)
@@ -54,6 +67,11 @@ def within_port_numbers(string):
 
 
 def extract_filename(byte_msg, str_start=2):
+    """Extracts a null terminated string from bytes
+
+    :param byte_msg: a bytes type with a bunch of ascii char bytes followed by a null byte
+    :param str_start: which byte index to start searching on
+    """
     filename = ''
     for byte in byte_msg[str_start:]:
         if byte == 0:
@@ -63,27 +81,46 @@ def extract_filename(byte_msg, str_start=2):
 
 
 def short_to_bytes(short):
+    """Takes a number between 0 and 65535 and returns a 2 byte representation
+
+    :param short: integer between 0-65535
+    """
+
     assert 0 <= short <= 65535
     return bytes([short // 256, short % 256])
 
 
-def bytes_to_short(msb, lsb):
+def bytes_to_short(msb: bytes, lsb: bytes) -> int:
+    """Takes 2 bytes and returns an integer between 0-65535
+
+    :param msb: the most significant byte
+    :param lsb: the least significant byte
+    """
+
     assert 0 <= lsb <= 255
     assert 0 <= msb <= 255
     return msb*256 + lsb
 
 
-def increment_filename(filename):
+def increment_filename(filename: str) -> str:
+    """Appends a (n+1) to the end of an existing file ie text(1).txt
+
+    :param filename: the name of the file
+    """
     assert type(filename) == str
     strs = filename.split('.')
-    if len(strs) != 2:
-        raise ValueError('filename must have exactly 1 file extension')
+    ending = ''
+    if len(strs) > 2:
+        raise ValueError('filename can only have up to 1 file extension')
+
+    if len(strs) == 2:
+        ending = '.' + strs[1]
 
     num = strs[0]
 
     lst = re.findall(r"\((\d+)\)", num)
     if lst:
         integer = int(lst[0])
-        return re.sub(r"\((\d+)\)", '('+str(integer + 1)+')', num) + '.' + strs[1]
+        return re.sub(r"\((\d+)\)", '(' + str(integer + 1) + ')', num) + ending
     else:
-        return num + '(1).' + strs[1]
+        return num + '(1)' + ending

@@ -1,3 +1,8 @@
+# Austin Williams
+# Shawn Butler
+# Computer Networks
+# 2 October 2020
+
 import socket
 from shared import *
 

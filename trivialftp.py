@@ -1,10 +1,20 @@
+# Austin Williams
+# Shawn Butler
+# Computer Networks
+# 2 October 2020
+
 import socket
 from shared import *
 import os
 from multithreaded import send, send_only_once
 
 
-def download(s, args):
+def download(s: socket.socket, args: argparse.Namespace) -> None:
+    """Initiates a read request, records incoming data and responds with acks until file is constructed
+
+    :param s: the UDP socket connected to the server
+    :param args: the argparser object with the ip, ports, and filename fields
+    """
     inbox = []
 
     # make / send read request
@@ -52,7 +62,12 @@ def download(s, args):
     f.close()
 
 
-def upload(s, args):
+def upload(s: socket.socket, args: argparse.Namespace) -> None:
+    """Initiates a write request, transmits data while acks are received until file is fully transferred
+
+    :param s: the UDP socket connected to the server
+    :param args: the argparser object with the ip, ports, and filename fields
+    """
     inbox = []
 
     # find file from args.filename

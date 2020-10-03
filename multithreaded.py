@@ -1,10 +1,22 @@
+# Austin Williams
+# Shawn Butler
+# Computer Networks
+# 2 October 2020
+
+
 from shared import *
 import socket
 from threading import Thread, Event
 from time import sleep
 
 
-def wait_for_result(s, args, connection_event, inbox):
+def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
+    """used by the thread to listen for data sent by the server
+
+    :param s: the UDP socket connected to the server
+    :param connection_event: the thread event that signals when it is time to stop sending the same message to the server
+    :param inbox: a list that is used to store incoming messages
+    """
     msg = None
     while not msg:
         try:
@@ -18,17 +30,33 @@ def wait_for_result(s, args, connection_event, inbox):
     return
 
 
-def spam_rrq(s, args, connection_event, msg):
+def spam_rrq(s: socket.socket, args: argparse.Namespace, connection_event: Event, msg: bytes):
+    """Used by the thread to resend a message until the server provides a valid response
+
+    :param s: the UDP socket connected to the server
+    :param args: the argparser object with the ip, ports, and filename fields
+    :param connection_event: the thread event that signals when it is time to stop sending the same message to the server
+    :param msg: the message sent to the server
+
+    """
     while not connection_event.is_set():
         # print("sending " + str(msg))
         s.sendto(msg, (args.ip, args.server_port))
         sleep(1)
 
 
-def send(s, args, msg, inbox):
+def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) -> bool:
+    """Opens up a thread to listen to the server and a thread to send a message over and over, returns True if a
+    response is not received within 10 seconds
+
+    :param s: the UDP socket connected to the server
+    :param args: the argparser object with the ip, ports, and filename fields
+    :param msg: the message sent to the server
+    :param inbox: a list that is used to store incoming messages
+    """
     connection_event = Event()
 
-    t1 = Thread(target=wait_for_result, args=(s, args, connection_event, inbox))
+    t1 = Thread(target=wait_for_result, args=(s, connection_event, inbox))
     t2 = Thread(target=spam_rrq, args=(s, args, connection_event, msg))
 
     t1.start()
@@ -42,14 +70,7 @@ def send(s, args, msg, inbox):
         return True
 
 
-def send_only_once(s, args, msg):
+def send_only_once(s: socket.socket, args: argparse.Namespace, msg: bytes):
+    """Does not wait for response from server, used for sending the final message to the server"""
     s.sendto(msg, (args.ip, args.server_port))
 
-
-if __name__ == '__main__':
-    args = setup_args()
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.bind(('', args.port))
-    inbox = []
-    msg = b'\x00\x01' + args.filename.encode() + b'\x00netascii\x00'
-    send(s, args, msg, inbox)
