@@ -13,6 +13,7 @@ import os
 from multithreaded import send, send_only_once
 from sys import exit
 
+
 def is_legit(msg: bytes) -> str:
     """Returns error msg if not legitimate packet
 
@@ -39,7 +40,6 @@ def is_legit(msg: bytes) -> str:
 
     except AssertionError as e:
         return e
-
 
 
 def read_error(error_msg: bytes):
@@ -69,8 +69,14 @@ def read_error(error_msg: bytes):
         print(string)
 
 
-def handle(error_msg: bytes, s:socket.socket, args: argparse.Namespace):
+def handle(s:socket.socket, args: argparse.Namespace, error_msg: bytes, addr):
     """Used to check and handle error packets"""
+    if addr != (args.ip, args.server_port):
+        error_str = "Unexpected TID"
+        print(error_str)
+        send_only_once(s, args, bytes(ErrorMessage(5, error_str)))
+        exit(1)
+
     error = is_legit(error_msg)
     if error:
         print(error)
@@ -102,8 +108,8 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
     while True:
         # wait for response, try 3 times, if timeout try again
         if inbox:
-            received = inbox.pop(0)
-            handle(received, s, args)
+            received, addr = inbox.pop(0)
+            handle(s, args, received, addr)
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
         if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
@@ -170,8 +176,8 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     while True:
         # pop latest message
         if inbox:
-            received = inbox.pop(0)
-            handle(received, s, args)
+            received, addr = inbox.pop(0)
+            handle(s, args, received, addr)
 
         # if received is ack then send next data packet
         if received and received[0:2] == ACK and bytes_to_short(received[2], received[3]) == block_num:

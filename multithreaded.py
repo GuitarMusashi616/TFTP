@@ -21,15 +21,16 @@ def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
     :param inbox: a list that is used to store incoming messages
     """
     msg = None
+    addr = None
     while not msg:
         try:
-            msg = s.recv(516)
+            msg, addr = s.recvfrom(516)
         except ConnectionResetError:
             continue
 
     connection_event.set()
     # print("received " + str(msg[:5]))
-    inbox.append(msg)
+    inbox.append((msg, addr))
     return
 
 
