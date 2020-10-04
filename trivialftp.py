@@ -18,6 +18,7 @@ def is_valid(msg: bytes, expected_block_num: int) -> str:
     """Returns error msg if not legitimate packet
 
     :param msg: The bytes that are sent from the server
+    :param expected_block_num: the block num that is expected, used to determine out of sequence error
     """
     try:
         assert len(msg) >= 2, 'Packet must be at least 2 bytes'
@@ -71,7 +72,13 @@ def read_error(error_msg: bytes):
 
 
 def handle(s: socket.socket, args: argparse.Namespace, error_msg: bytes, expected_block_num: int):
-    """Used to check and handle error packets"""
+    """Used to check and handle error packets
+
+    :param s: the UDP socket connected to the server
+    :param args: the argparser object with the ip, ports, and filename fields
+    :param error_msg: valid error packet sent from the server
+    :param expected_block_num: the block num that is expected, used to determine out of sequence error
+    """
     error = is_valid(error_msg, expected_block_num)
     if error:
         print(error)
