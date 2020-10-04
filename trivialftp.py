@@ -42,35 +42,31 @@ def is_legit(msg: bytes) -> str:
 
 
 
-
 def read_error(error_msg: bytes):
     """Used to print the received server error message
 
     :param error_msg: bytes sent from the server whose opcode is 5
     """
-    if not is_legit(error_msg):
-        if error_msg[2:4] == Error.NOT_DEFINED:
-            print("Server Error: Undefined")
-        elif error_msg[2:4] == Error.FILE_NOT_FOUND:
-            print("Server Error: File Not Found")
-        elif error_msg[2:4] == Error.ACCESS_VIOLATION:
-            print("Server Error: Access Violation")
-        elif error_msg[2:4] == Error.DISK_FULL:
-            print("Server Error: Disk Full")
-        elif error_msg[2:4] == Error.ILLEGAL_OPERATION:
-            print("Server Error: Illegal Operation")
-        elif error_msg[2:4] == Error.UNKNOWN_TID:
-            print("Server Error: Unknown Transfer ID")
-        elif error_msg[2:4] == Error.FILE_EXISTS:
-            print("Server Error: File Exists")
-        elif error_msg[2:4] == Error.NO_SUCH_USER:
-            print("Server Error: No Such User")
-        string = extract_null_terminated_string(error_msg, 4)
-        if string:
-            print("Error Message: ", end='')
-            print(string)
-    else:
-        print("Unreadable Server Error")
+    if error_msg[2:4] == Error.NOT_DEFINED:
+        print("Server Error: Undefined")
+    elif error_msg[2:4] == Error.FILE_NOT_FOUND:
+        print("Server Error: File Not Found")
+    elif error_msg[2:4] == Error.ACCESS_VIOLATION:
+        print("Server Error: Access Violation")
+    elif error_msg[2:4] == Error.DISK_FULL:
+        print("Server Error: Disk Full")
+    elif error_msg[2:4] == Error.ILLEGAL_OPERATION:
+        print("Server Error: Illegal Operation")
+    elif error_msg[2:4] == Error.UNKNOWN_TID:
+        print("Server Error: Unknown Transfer ID")
+    elif error_msg[2:4] == Error.FILE_EXISTS:
+        print("Server Error: File Exists")
+    elif error_msg[2:4] == Error.NO_SUCH_USER:
+        print("Server Error: No Such User")
+    string = extract_null_terminated_string(error_msg, 4)
+    if string:
+        print("Error Message: ", end='')
+        print(string)
 
 
 def download(s: socket.socket, args: argparse.Namespace) -> None:
@@ -98,9 +94,9 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         # wait for response, try 3 times, if timeout try again
         if inbox:
             received = inbox.pop(0)
-            # error_msg = is_legit(received)
-            # if error_msg:
-            #     send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+            error_msg = is_legit(received)
+            if error_msg:
+                send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
         if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
@@ -168,9 +164,9 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         # pop latest message
         if inbox:
             msg = inbox.pop(0)
-            # error_msg = is_legit(msg)
-            # if error_msg:
-            #     send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+            error_msg = is_legit(msg)
+            if error_msg:
+                send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
 
         # if msg is ack then send next data packet
         if msg and msg[0:2] == ACK and bytes_to_short(msg[2], msg[3]) == block_num:
