@@ -72,7 +72,7 @@ def read_error(error_msg: bytes):
 
 def handle(s: socket.socket, args: argparse.Namespace, error_msg: bytes, expected_block_num: int):
     """Used to check and handle error packets"""
-    error = is_valid(error_msg)
+    error = is_valid(error_msg, expected_block_num)
     if error:
         print(error)
         send_only_once(s, args, bytes(ErrorMessage(4, str(error))))
