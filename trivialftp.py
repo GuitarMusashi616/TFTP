@@ -75,7 +75,7 @@ def handle(s:socket.socket, args: argparse.Namespace, error_msg: bytes, addr):
         error_str = "Unexpected TID"
         print(error_str)
         send_only_once(s, args, bytes(ErrorMessage(5, error_str)))
-        exit(1)
+        return
 
     error = is_legit(error_msg)
     if error:
