@@ -13,7 +13,7 @@ from threading import Thread, Event
 from time import sleep
 
 
-def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
+def wait_for_result(s: socket.socket, args: argparse.Namespace, connection_event: Event, inbox: list):
     """used by the thread to listen for data sent by the server
 
     :param s: the UDP socket connected to the server
@@ -21,9 +21,12 @@ def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
     :param inbox: a list that is used to store incoming messages
     """
     msg = None
+    addr = None
     while not msg:
         try:
-            msg = s.recv(516)
+            msg, addr = s.recvfrom(516)
+            if addr != (args.ip, args.server_port):
+                msg = None
         except ConnectionResetError:
             continue
 
@@ -59,7 +62,7 @@ def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) ->
     """
     connection_event = Event()
 
-    t1 = Thread(target=wait_for_result, args=(s, connection_event, inbox))
+    t1 = Thread(target=wait_for_result, args=(s, args, connection_event, inbox))
     t2 = Thread(target=spam_rrq, args=(s, args, connection_event, msg))
 
     t1.start()
