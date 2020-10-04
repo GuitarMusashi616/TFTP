@@ -71,10 +71,10 @@ def read_error(error_msg: bytes):
 
 def handle(error_msg: bytes, s:socket.socket, args: argparse.Namespace):
     """Used to check and handle error packets"""
-    error_msg = is_legit(error_msg)
-    if error_msg:
-        print(error_msg)
-        send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+    error = is_legit(error_msg)
+    if error:
+        print(error)
+        send_only_once(s, args, bytes(ErrorMessage(4, str(error))))
         exit(1)
 
 
