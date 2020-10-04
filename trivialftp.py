@@ -75,13 +75,15 @@ def handle(s:socket.socket, args: argparse.Namespace, error_msg: bytes, addr):
         error_str = "Unexpected TID"
         print(error_str)
         send_only_once(s, args, bytes(ErrorMessage(5, error_str)))
-        return
+        return False
 
     error = is_legit(error_msg)
     if error:
         print(error)
         send_only_once(s, args, bytes(ErrorMessage(4, str(error))))
         exit(1)
+
+    return True
 
 
 def download(s: socket.socket, args: argparse.Namespace) -> None:
@@ -109,10 +111,10 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         # wait for response, try 3 times, if timeout try again
         if inbox:
             received, addr = inbox.pop(0)
-            handle(s, args, received, addr)
+            is_valid = handle(s, args, received, addr)
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
-        if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
+        if is_valid and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
             # save contents
             f.write(received[4:])
 
@@ -131,7 +133,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
             # increment block_num
             block_num = (block_num + 1) % 65536
 
-        elif received and received[0:2] == ERROR:
+        elif is_valid and received[0:2] == ERROR:
             # handle errors
             read_error(received)
             break
@@ -173,14 +175,16 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     data_bytes = file.read(512)
     received = None
     data_msg = None
+    is_valid = None
+
     while True:
         # pop latest message
         if inbox:
             received, addr = inbox.pop(0)
-            handle(s, args, received, addr)
+            is_valid = handle(s, args, received, addr)
 
         # if received is ack then send next data packet
-        if received and received[0:2] == ACK and bytes_to_short(received[2], received[3]) == block_num:
+        if is_valid and received[0:2] == ACK and bytes_to_short(received[2], received[3]) == block_num:
             block_num = (block_num + 1) % 65536
             data_msg = DataMessage(block_num, data_bytes)
 
@@ -194,7 +198,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
             data_bytes = file.read(512)
 
         # if received is error then Error
-        elif received and received[0:2] == ERROR:
+        elif is_valid and received[0:2] == ERROR:
             read_error(received)
             break
 
