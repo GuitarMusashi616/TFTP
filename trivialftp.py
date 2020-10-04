@@ -11,33 +11,36 @@ from shared import *
 from message import *
 import os
 from multithreaded import send, send_only_once
+from sys import exit
 
-
-def is_legit(msg: bytes) -> bool:
-    """Returns True if msg is legitimate (no wrong opcode etc)
+def is_legit(msg: bytes) -> str:
+    """Returns error msg if not legitimate packet
 
     :param msg: The bytes that are sent from the server
     """
     try:
-        assert msg[0] == 0 and 1 <= msg[1] <= 5, 'opcode must be between 1-5'
+        assert len(msg) >= 2, 'Packet must be at least 2 bytes'
+        assert msg[0] == 0 and 1 <= msg[1] <= 5, 'Opcode must be between 1-5'
 
         if msg[0:2] == RRQ or msg[0:2] == WRQ:
-            assert list(msg[2:]).count(0) == 2
-            assert msg[-10:0] == b'\x00netascii\x00'
+            assert list(msg[2:]).count(0) == 2, "Must have 2 0-bytes after opcode"
+            assert msg[-10:0] == b'\x00netascii\x00', "Mode must be netascii and both filename and mode must be " \
+                                                      "followed by a zero byte "
 
         if msg[0:2] == DATA:
-            assert len(msg) <= 516
+            assert len(msg) <= 516, "Data Packet must be less than or equal to 516 bytes total"
 
         if msg[0:2] == ACK:
-            assert len(msg) == 4
+            assert len(msg) == 4, "Ack Packet must be exactly 4 bytes total"
 
         if msg[0:2] == ERROR:
-            assert msg[2] == 0 and 0 <= msg[3] <= 7
-            assert list(msg[4:]).count(0) == 1
+            assert msg[2] == 0 and 0 <= msg[3] <= 7, "Error code must be between 1-7"
+            assert list(msg[4:]).count(0) == 1, "Error msg must be followed by a 0 byte"
 
-    except AssertionError:
-        return False
-    return True
+    except AssertionError as e:
+        return e
+
+
 
 
 def read_error(error_msg: bytes):
@@ -45,7 +48,7 @@ def read_error(error_msg: bytes):
 
     :param error_msg: bytes sent from the server whose opcode is 5
     """
-    if is_legit(error_msg):
+    if not is_legit(error_msg):
         if error_msg[2:4] == Error.NOT_DEFINED:
             print("Server Error: Undefined")
         elif error_msg[2:4] == Error.FILE_NOT_FOUND:
@@ -143,7 +146,11 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     try:
         file = open(args.filename, 'rb')
     except FileNotFoundError:
-        print("file not found, try again")
+        print("File not found, try again")
+        exit(1)
+    except IOError:
+        print("File access denied, try again")
+        exit(1)
 
     # make / send write request
     wrq_msg = WriteRequest(args.filename, 'netascii')
@@ -164,9 +171,9 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
             block_num = (block_num + 1) % 65536
             data_msg = DataMessage(block_num, data_bytes)
 
-            if len(data_bytes) < 512:
-                send_only_once(s, args, bytes(data_msg))
-                break
+            # if len(data_bytes) < 512:
+            #     send_only_once(s, args, bytes(data_msg))
+            #     break
             if send(s, args, bytes(data_msg), inbox):
                 break
             data_bytes = file.read(512)
