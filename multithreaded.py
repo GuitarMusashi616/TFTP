@@ -11,10 +11,14 @@ from shared import *
 import socket
 from threading import Thread, Event
 from time import sleep
+from message import ErrorMessage
+
+SECONDS_UNTIL_TIMEOUT = 10
+SECONDS_UNTIL_RETRANSMISSION = 1
 
 
 def wait_for_result(s: socket.socket, args: argparse.Namespace, connection_event: Event, inbox: list):
-    """used by the thread to listen for data sent by the server
+    """used by the thread to listen for data sent by the server, wrong transfer ID messages are ignored
 
     :param s: the UDP socket connected to the server
     :param connection_event: the thread event that signals when it is time to stop sending the same message to the server
@@ -26,6 +30,8 @@ def wait_for_result(s: socket.socket, args: argparse.Namespace, connection_event
         try:
             msg, addr = s.recvfrom(516)
             if addr != (args.ip, args.server_port):
+                error_msg = bytes(ErrorMessage(5, "Unexpected TID"))
+                s.sendto(error_msg, addr)
                 msg = None
         except ConnectionResetError:
             continue
@@ -48,7 +54,7 @@ def spam_rrq(s: socket.socket, args: argparse.Namespace, connection_event: Event
     while not connection_event.is_set():
         # print("sending " + str(msg))
         s.sendto(msg, (args.ip, args.server_port))
-        sleep(1)
+        sleep(SECONDS_UNTIL_RETRANSMISSION)
 
 
 def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) -> bool:
@@ -68,7 +74,7 @@ def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) ->
     t1.start()
     t2.start()
 
-    t1.join(10)
+    t1.join(SECONDS_UNTIL_TIMEOUT)
 
     if not connection_event.is_set():
         # raise ConnectionError("Took longer than 20 seconds")
