@@ -14,7 +14,7 @@ from multithreaded import send, send_only_once
 from sys import exit
 
 
-def is_legit(msg: bytes) -> str:
+def is_valid(msg: bytes, expected_block_num: int) -> str:
     """Returns error msg if not legitimate packet
 
     :param msg: The bytes that are sent from the server
@@ -27,12 +27,13 @@ def is_legit(msg: bytes) -> str:
             assert list(msg[2:]).count(0) == 2, "Must have 2 0-bytes after opcode"
             assert msg[-10:0] == b'\x00netascii\x00', "Mode must be netascii and both filename and mode must be " \
                                                       "followed by a zero byte "
-
         if msg[0:2] == DATA:
             assert len(msg) <= 516, "Data Packet must be less than or equal to 516 bytes total"
+            assert bytes_to_short(msg[2], msg[3]) <= expected_block_num, "Out of sequence error"
 
         if msg[0:2] == ACK:
             assert len(msg) == 4, "Ack Packet must be exactly 4 bytes total"
+            assert bytes_to_short(msg[2], msg[3]) <= expected_block_num, "Out of sequence error"
 
         if msg[0:2] == ERROR:
             assert msg[2] == 0 and 0 <= msg[3] <= 7, "Error code must be between 1-7"
@@ -45,7 +46,7 @@ def is_legit(msg: bytes) -> str:
 def read_error(error_msg: bytes):
     """Used to print the received server error message
 
-    :param error_msg: bytes sent from the server whose opcode is 5
+    :param error_msg: valid error packet sent from the server
     """
     if error_msg[2:4] == Error.NOT_DEFINED:
         print("Server Error: Undefined")
@@ -69,9 +70,9 @@ def read_error(error_msg: bytes):
         print(string)
 
 
-def handle(error_msg: bytes, s: socket.socket, args: argparse.Namespace):
+def handle(s: socket.socket, args: argparse.Namespace, error_msg: bytes, expected_block_num: int):
     """Used to check and handle error packets"""
-    error = is_legit(error_msg)
+    error = is_valid(error_msg)
     if error:
         print(error)
         send_only_once(s, args, bytes(ErrorMessage(4, str(error))))
@@ -103,7 +104,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         # wait for response, try 3 times, if timeout try again
         if inbox:
             received = inbox.pop(0)
-            handle(received, s, args)
+            handle(s, args, received, block_num)
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
         if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
@@ -171,7 +172,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
         # pop latest message
         if inbox:
             received = inbox.pop(0)
-            handle(received, s, args)
+            handle(s, args, received, block_num)
 
         # if received is ack then send next data packet
         if received and received[0:2] == ACK and bytes_to_short(received[2], received[3]) == block_num:

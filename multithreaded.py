@@ -18,7 +18,7 @@ SECONDS_UNTIL_RETRANSMISSION = 1
 
 
 def wait_for_result(s: socket.socket, args: argparse.Namespace, connection_event: Event, inbox: list):
-    """used by the thread to listen for data sent by the server, wrong transfer ID messages are ignored
+    """used by the thread to listen for data sent by the server, wrong transfer ID messages are ignored / sent error(5)
 
     :param s: the UDP socket connected to the server
     :param connection_event: the thread event that signals when it is time to stop sending the same message to the server
