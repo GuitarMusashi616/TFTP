@@ -69,6 +69,15 @@ def read_error(error_msg: bytes):
         print(string)
 
 
+def handle(error_msg: bytes, s:socket.socket, args: argparse.Namespace):
+    """Used to check and handle error packets"""
+    error_msg = is_legit(error_msg)
+    if error_msg:
+        print(error_msg)
+        send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+        exit(1)
+
+
 def download(s: socket.socket, args: argparse.Namespace) -> None:
     """Initiates a read request, records incoming data and responds with acks until file is constructed
 
@@ -94,9 +103,7 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
         # wait for response, try 3 times, if timeout try again
         if inbox:
             received = inbox.pop(0)
-            error_msg = is_legit(received)
-            if error_msg:
-                send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+            handle(received, s, args)
 
         # query response, if data and block_num==1++ then ack, continue acking until data < 512
         if received and received[0:2] == DATA and bytes_to_short(received[2], received[3]) == block_num:
@@ -158,18 +165,16 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     # wait for acks while sending data
     block_num = 0
     data_bytes = file.read(512)
-    msg = None
+    received = None
     data_msg = None
     while True:
         # pop latest message
         if inbox:
-            msg = inbox.pop(0)
-            error_msg = is_legit(msg)
-            if error_msg:
-                send_only_once(s, args, bytes(ErrorMessage(4, error_msg)))
+            received = inbox.pop(0)
+            handle(received, s, args)
 
-        # if msg is ack then send next data packet
-        if msg and msg[0:2] == ACK and bytes_to_short(msg[2], msg[3]) == block_num:
+        # if received is ack then send next data packet
+        if received and received[0:2] == ACK and bytes_to_short(received[2], received[3]) == block_num:
             block_num = (block_num + 1) % 65536
             data_msg = DataMessage(block_num, data_bytes)
 
@@ -182,12 +187,12 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
                 break
             data_bytes = file.read(512)
 
-        # if msg is error then Error
-        elif msg and msg[0:2] == ERROR:
-            read_error(msg)
+        # if received is error then Error
+        elif received and received[0:2] == ERROR:
+            read_error(received)
             break
 
-        # otherwise resend last data msg
+        # otherwise resend last data received
         else:
             if send(s, args, bytes(data_msg), inbox):
                 break
