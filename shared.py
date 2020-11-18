@@ -18,7 +18,9 @@ NULL = b'\x00'
 
 
 class Error:
-    """Used to compare error codes in bytes"""
+    """
+    Used to compare error codes in bytes
+    """
     NOT_DEFINED = b'\x00\x00'
     FILE_NOT_FOUND = b'\x00\x01'
     ACCESS_VIOLATION = b'\x00\x02'
@@ -30,7 +32,9 @@ class Error:
 
 
 def setup_args() -> argparse.Namespace:
-    """Utilizes argparser to setup and return arguments"""
+    """
+    Utilizes argparser to setup and return arguments
+    """
     parser = argparse.ArgumentParser(description='send files reliably over UDP')
 
     parser.add_argument('-a', action='store', dest='ip',
@@ -52,9 +56,11 @@ def setup_args() -> argparse.Namespace:
 
 
 def within_port_numbers(string: str) -> int:
-    """Used within argparser to filter out the port and server_port arguments
+    """
+    Used within argparser to filter out the port and server_port arguments
 
-    :param string: The string representation of the port or server_port argument"""
+    :param string: The string representation of the port or server_port argument
+    """
     value = None
     try:
         value = int(string)
@@ -67,7 +73,8 @@ def within_port_numbers(string: str) -> int:
 
 
 def extract_null_terminated_string(byte_msg: bytes, str_start: int = 2) -> str:
-    """Extracts a null terminated string from bytes
+    """
+    Extracts a null terminated string from bytes
 
     :param byte_msg: a bytes type with a bunch of ascii char bytes followed by a null byte
     :param str_start: which byte index to start searching on
@@ -81,7 +88,8 @@ def extract_null_terminated_string(byte_msg: bytes, str_start: int = 2) -> str:
 
 
 def short_to_bytes(short: int):
-    """Takes a number between 0 and 65535 and returns a 2 byte representation
+    """
+    Takes a number between 0 and 65535 and returns a 2 byte representation
 
     :param short: integer between 0-65535
     """
@@ -103,7 +111,8 @@ def bytes_to_short(msb: bytes, lsb: bytes) -> int:
 
 
 def increment_filename(filename: str) -> str:
-    """Appends a (n+1) to the end of an existing file ie text(1).txt
+    """
+    Appends a (n+1) to the end of an existing file ie text(1).txt
 
     :param filename: the name of the file
     """

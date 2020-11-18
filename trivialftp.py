@@ -15,7 +15,8 @@ from sys import exit
 
 
 def is_legit(msg: bytes) -> str:
-    """Returns error msg if not legitimate packet
+    """
+    Returns error msg if not legitimate packet
 
     :param msg: The bytes that are sent from the server
     """
@@ -70,7 +71,9 @@ def read_error(error_msg: bytes):
 
 
 def handle(s:socket.socket, args: argparse.Namespace, error_msg: bytes, addr):
-    """Used to check and handle error packets"""
+    """
+    Used to check and handle error packets
+    """
     if addr != (args.ip, args.server_port):
         error_str = "Unexpected TID"
         print(error_str)
@@ -87,7 +90,8 @@ def handle(s:socket.socket, args: argparse.Namespace, error_msg: bytes, addr):
 
 
 def download(s: socket.socket, args: argparse.Namespace) -> None:
-    """Initiates a read request, records incoming data and responds with acks until file is constructed
+    """
+    Initiates a read request, records incoming data and responds with acks until file is constructed
 
     :param s: the UDP socket connected to the server
     :param args: the argparser object with the ip, ports, and filename fields
@@ -147,7 +151,8 @@ def download(s: socket.socket, args: argparse.Namespace) -> None:
 
 
 def upload(s: socket.socket, args: argparse.Namespace) -> None:
-    """Initiates a write request, transmits data while acks are received until file is fully transferred
+    """
+    Initiates a write request, transmits data while acks are received until file is fully transferred
 
     :param s: the UDP socket connected to the server
     :param args: the argparser object with the ip, ports, and filename fields

@@ -14,7 +14,8 @@ from time import sleep
 
 
 def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
-    """used by the thread to listen for data sent by the server
+    """
+    Used by the thread to listen for data sent by the server
 
     :param s: the UDP socket connected to the server
     :param connection_event: the thread event that signals when it is time to stop sending the same message to the server
@@ -35,7 +36,8 @@ def wait_for_result(s: socket.socket, connection_event: Event, inbox: list):
 
 
 def spam_rrq(s: socket.socket, args: argparse.Namespace, connection_event: Event, msg: bytes):
-    """Used by the thread to resend a message until the server provides a valid response
+    """
+    Used by the thread to resend a message until the server provides a valid response
 
     :param s: the UDP socket connected to the server
     :param args: the argparser object with the ip, ports, and filename fields
@@ -50,7 +52,8 @@ def spam_rrq(s: socket.socket, args: argparse.Namespace, connection_event: Event
 
 
 def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) -> bool:
-    """Opens up a thread to listen to the server and a thread to send a message over and over, returns True if a
+    """
+    Opens up a thread to listen to the server and a thread to send a message over and over, returns True if a
     response is not received within 10 seconds
 
     :param s: the UDP socket connected to the server
@@ -75,6 +78,8 @@ def send(s: socket.socket, args: argparse.Namespace, msg: bytes, inbox: list) ->
 
 
 def send_only_once(s: socket.socket, args: argparse.Namespace, msg: bytes):
-    """Does not wait for response from server, used for sending the final message to the server"""
+    """
+    Does not wait for response from server, used for sending the final message to the server
+    """
     s.sendto(msg, (args.ip, args.server_port))
 
