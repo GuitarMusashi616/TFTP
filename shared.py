@@ -52,6 +52,9 @@ def setup_args() -> argparse.Namespace:
     parser.add_argument('-m', action='store', dest='mode', required=False, choices=['r', 'w'],
                         help='r = read from server, w = write to server')
 
+    parser.add_argument('-k', action='store', dest='random', required=False,
+                        help='no idea')
+
     return parser.parse_args()
 
 
