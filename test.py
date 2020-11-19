@@ -3,6 +3,7 @@ import threading
 import socket
 import random
 import time
+import os
 from queue import Queue
 from shared import *
 
@@ -83,7 +84,7 @@ def test_locking():
 
 
 def server_to_file(s):
-    with open("text.txt", 'w') as file:
+    with open("text.txt", 'a') as file:
         while True:
             msg, addr = s.recvfrom(2048)
             file.write(str(msg))
@@ -94,6 +95,7 @@ def server_to_file(s):
 
 if __name__ == "__main__":
     args = setup_args()
+    os.remove("text.txt")
     s = setup_server(args.server_port)
     server_to_file(s)
     # threading.Thread(target=server_to_file, args=(s,)).start()
