@@ -6,6 +6,7 @@ import time
 from queue import Queue
 from shared import *
 
+
 def single_client():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_port = 54321
@@ -94,4 +95,4 @@ def server_to_file(s):
 if __name__ == "__main__":
     args = setup_args()
     s = setup_server(args.server_port)
-    threading.Thread(target=server_to_file).start()
+    threading.Thread(target=server_to_file, args=(s,)).start()
