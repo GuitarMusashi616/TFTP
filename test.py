@@ -95,4 +95,5 @@ def server_to_file(s):
 if __name__ == "__main__":
     args = setup_args()
     s = setup_server(args.server_port)
-    threading.Thread(target=server_to_file, args=(s,)).start()
+    server_to_file(s)
+    # threading.Thread(target=server_to_file, args=(s,)).start()
