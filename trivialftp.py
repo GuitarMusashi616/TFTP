@@ -214,7 +214,7 @@ def upload(s: socket.socket, args: argparse.Namespace) -> None:
     file.close()
 
 
-if __name__ == '__main__':
+def main_client():
     # setup the args and the socket
     args = setup_args()
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -226,5 +226,30 @@ if __name__ == '__main__':
     elif args.mode == 'w':
         upload(s, args)
     s.close()
+
+
+def receiver(queue_lock):
+    """
+    The Producer, captures requests and puts them in the queue
+    """
+
+
+
+def sender(queue_lock):
+    """
+    The Consumer, takes requests from queue and responds accordingly
+    """
+    pass
+
+
+if __name__ == '__main__':
+    args = setup_args()
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('', args.server_port))
+
+
+
+
+
 
 # python3 /home/A365/tftp/tester.py -f trivialftp.py
