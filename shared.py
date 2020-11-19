@@ -38,18 +38,18 @@ def setup_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description='send files reliably over UDP')
 
     parser.add_argument('-a', action='store', dest='ip',
-                        help='specify ip address', required=True)
+                        help='specify ip address', required=False)
 
     parser.add_argument('-sp', action='store', dest='server_port', type=within_port_numbers,
-                    help='specify server port number', required=True)
+                    help='specify server port number', required=False)
 
     parser.add_argument('-f', action='store', dest='filename',
-                        help='specify name of file to download / upload', required=True)
+                        help='specify name of file to download / upload', required=False)
 
     parser.add_argument('-p', action='store', dest='port', type=within_port_numbers,
-                        help='specify port number', required=True)
+                        help='specify port number', required=False)
 
-    parser.add_argument('-m', action='store', dest='mode', required=True, choices=['r', 'w'],
+    parser.add_argument('-m', action='store', dest='mode', required=False, choices=['r', 'w'],
                         help='r = read from server, w = write to server')
 
     return parser.parse_args()
