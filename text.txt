@@ -1,15 +1,7 @@
-b'TestTestTest' - ('127.0.0.1', 5933)
-b'TestTestTest' - ('127.0.0.1', 5013)
-b'TestTestTest' - ('127.0.0.1', 5682)
-b'TestTestTest' - ('127.0.0.1', 5138)
-b'TestTestTest' - ('127.0.0.1', 5077)
-b'TestTestTest' - ('127.0.0.1', 5306)
-b'TestTestTest' - ('127.0.0.1', 5828)
-b'TestTestTest' - ('127.0.0.1', 5493)
-b'TestTestTest' - ('127.0.0.1', 5160)
-b'TestTestTest' - ('127.0.0.1', 5529)
-b'TestTestTest' - ('127.0.0.1', 5349)
-b'TestTestTest' - ('127.0.0.1', 5852)
-b'TestTestTest' - ('127.0.0.1', 5988)
-b'TestTestTest' - ('127.0.0.1', 5292)
-b'TestTestTest' - ('127.0.0.1', 5481)
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry

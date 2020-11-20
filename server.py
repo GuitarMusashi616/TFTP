@@ -7,9 +7,8 @@ import socket
 from shared import *
 
 
-def wait_for_clients():
+def wait_for_clients(port):
     # setup socket
-    port = 12345
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.bind(('', port))
     print("server is ready to receive")
@@ -70,4 +69,5 @@ def wait_for_clients():
 
 
 if __name__ == '__main__':
-    wait_for_clients()
+    args = setup_args()
+    wait_for_clients(args.server_port)

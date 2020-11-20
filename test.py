@@ -6,7 +6,8 @@ import time
 import os
 from queue import Queue
 from shared import *
-
+from message import *
+from connection import *
 
 def single_client():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -93,9 +94,46 @@ def server_to_file(s):
             file.write('\n')
 
 
-if __name__ == "__main__":
+def main_server_to_file():
     args = setup_args()
     os.remove("text.txt")
     s = setup_server(args.server_port)
     server_to_file(s)
-    # threading.Thread(target=server_to_file, args=(s,)).start()
+
+
+def test_connection_state():
+    read_request, addr_1 = bytes()
+    write_request, addr_2 = bytes()
+    msg_1, addr_1 = bytes()
+    msg_2, addr_2 = bytes()
+
+    client_1 = Connection(read_request, addr_1)
+    client_2 = Connection(write_request, addr_2)
+
+    client_1.handle(msg_1, addr_1)  # processes msg and responds to the client, sends data and waits for acks
+    client_2.handle(msg_2, addr_2)  # sends ack and waits for more data
+
+
+def test_single_connection_with_server():
+    args = setup_args()
+    client_1 = Connection()
+
+    with setup_server(args.server_port) as s:
+        while True:
+            msg, addr = s.recvfrom(2048)
+            client_1.handle(msg, addr)
+
+
+def test_init_state_transition():
+    msg_1 = ReadRequest('text.txt', 'netascii')
+    addr_1 = ('127.0.0.1', 12345)
+
+    client_1 = Connection()
+    client_1.handle(bytes(msg_1), addr_1)
+
+    assert client_1.type == "Upload"
+    assert isinstance(client_1.state, SendData)
+
+
+if __name__ == "__main__":
+    test_init_state_transition()

@@ -228,24 +228,8 @@ def main_client():
     s.close()
 
 
-def receiver(queue_lock):
-    """
-    The Producer, captures requests and puts them in the queue
-    """
-
-
-
-def sender(queue_lock):
-    """
-    The Consumer, takes requests from queue and responds accordingly
-    """
-    pass
-
-
 if __name__ == '__main__':
-    args = setup_args()
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.bind(('', args.server_port))
+    main_client()
 
 
 
