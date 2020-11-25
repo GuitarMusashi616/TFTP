@@ -57,7 +57,7 @@ class Upload(ConnectionState):
         data_msg = DATA + block_num_bytes + data_bytes
         self.connection.output_queue.put((data_msg, self.connection.addr))
         if len(data_msg) < 516:
-            self.connection.state = FinalUpload(ConnectionState)
+            self.connection.state = FinalUpload(self.connection)
 
     def handle(self, msg, addr):
         if msg == ACK + short_to_bytes(self.connection.block_num):
