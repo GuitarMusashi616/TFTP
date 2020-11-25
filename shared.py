@@ -41,7 +41,7 @@ def setup_args() -> argparse.Namespace:
                         help='specify ip address', required=False)
 
     parser.add_argument('-sp', action='store', dest='server_port', type=within_port_numbers,
-                    help='specify server port number', required=False)
+                        help='specify server port number', required=False)
 
     parser.add_argument('-f', action='store', dest='filename',
                         help='specify name of file to download / upload', required=False)

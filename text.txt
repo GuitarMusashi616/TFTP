@@ -5,3 +5,397 @@ from django.utils.http import urlencode
 from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
 
 from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+v
+from django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryv
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntryfrom django.utils.html import format_html
+
+from django.utils.http import urlencode
+
+from .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement
+
+from django.contrib.admin.models import LogEntry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

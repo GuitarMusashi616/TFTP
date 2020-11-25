@@ -8,6 +8,8 @@
 
 from shared import *
 
+TIMEOUT = 3
+
 
 class Message:
     """
@@ -25,7 +27,7 @@ class ReadRequest(Message):
     """
     Used to quickly construct a read request
     """
-    def __init__(self, filename: str, mode: str):
+    def __init__(self, filename: str, mode: str = 'netascii'):
         super().__init__(1)
         self.filename = filename
         self.mode = mode
@@ -38,7 +40,7 @@ class WriteRequest(Message):
     """
     Used to quickly construct a write request
     """
-    def __init__(self, filename: str, mode: str):
+    def __init__(self, filename: str, mode: str = 'netascii'):
         super().__init__(2)
         self.filename = filename
         self.mode = mode

@@ -228,8 +228,29 @@ def main_client():
     s.close()
 
 
+class Args1:
+    ip = '127.0.0.1'
+    server_port = 54321
+    filename = 'text.txt'
+    port = 12345
+    mode = 'r'
+
+
+def client_thread():
+    args = Args1()
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('', args.port))
+    s.settimeout(TIMEOUT)
+    # if r then read request, if w then write request
+    if args.mode == 'r':
+        download(s, args)
+    elif args.mode == 'w':
+        upload(s, args)
+    s.close()
+
+
 if __name__ == '__main__':
-    main_client()
+    client_thread()
 
 
 
