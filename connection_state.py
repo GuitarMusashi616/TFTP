@@ -23,31 +23,34 @@ class Open(ConnectionState):
     def handle(self, msg, addr):
         if msg[0:2] == RRQ:
             filename = extract_null_terminated_string(msg)
-            if os.path.exists(filename):  # todo: replace with try except
-                self.connection.type = 'Upload'
-                self.connection.file = open(filename, 'rb')
-                self.connection.block_num = 1
-                self.connection.addr = addr
-                self.connection.state = Upload(self.connection)
-            else:
+
+            if not os.path.exists(filename):  # todo: replace with try except
                 err_str = "filename does not correspond to a file saved on the server, try again"
                 err_msg = ERROR + Error.FILE_NOT_FOUND + err_str.encode() + NULL
                 self.connection.output_queue.put((err_msg, addr))
                 self.connection.state = Closed(self.connection)
+                return
+
+            self.connection.type = 'Upload'
+            self.connection.file = open(filename, 'rb')
+            self.connection.block_num = 1
+            self.connection.addr = addr
+            self.connection.state = Upload(self.connection)
 
         elif msg[0:2] == WRQ:
             filename = extract_null_terminated_string(msg)
-            if not os.path.exists(filename):
-                self.connection.type = 'Download'
-                self.connection.file = open(filename, 'wb')
-                self.connection.block_num = 0
-                self.connection.addr = addr
-                self.connection.state = Download(self.connection)
-            else:
+            if os.path.exists(filename):
                 err_str = "filename already exists at destination"
                 err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
                 self.connection.output_queue.put((err_msg, addr))
                 self.connection.state = Closed(self.connection)
+                return
+
+            self.connection.type = 'Download'
+            self.connection.file = open(filename, 'wb')
+            self.connection.block_num = 0
+            self.connection.addr = addr
+            self.connection.state = Download(self.connection)
 
 
 class Upload(ConnectionState):

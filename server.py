@@ -146,5 +146,5 @@ def test_file_exists():
 
 
 if __name__ == '__main__':
-    send_examples_for_test(write_request_msgs)
+    send_examples_for_test(read_request_msgs)
     # test_file_exists()

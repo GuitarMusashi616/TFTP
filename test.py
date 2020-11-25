@@ -209,15 +209,18 @@ def test_threads():
 
 
 def put_msgs_in_queue(input_queue, sock):
-    while True:
+    is_open = True
+    shutdown_msg = ReadRequest('shutdown.txt')
+    while is_open:
         try:
             new_msg, new_addr = sock.recvfrom(516)
         except (ConnectionResetError, socket.timeout):
             print('No more new messages')
             break
         else:
+            if new_msg == bytes(shutdown_msg):
+                is_open = False
             input_queue.put((new_msg, new_addr))
-            # print(f"{new_msg[:10]} from {new_addr} added to input queue")
             if VERBOSE:
                 print("{} from {} added to input queue".format(new_msg[:10], new_addr))
 
@@ -229,7 +232,6 @@ def move_from_input_to_output(input_queue, output_queue):
         input_queue.task_done()
         if VERBOSE:
             print("{} from {} moved to output queue".format(msg[:10], addr))
-        # print(f"{msg[:10]} from {addr} moved to output queue")
 
 
 def process_msgs(input_queue, conn_dict):
@@ -239,7 +241,6 @@ def process_msgs(input_queue, conn_dict):
         input_queue.task_done()
         if VERBOSE:
             print("{} from {} processed, reply sent to output queue".format(msg[:10], addr))
-        # print(f"{msg[:10]} from {addr} processed, reply sent to output queue")
 
 
 def send_whenever(output_queue, sock):
@@ -272,6 +273,8 @@ def test_input_and_output_sending(server_port):
     t_receive.join()
     t_process.join()
     t_send.join()
+
+    sock.close()
 
 
 def test_duo_connection():
