@@ -214,7 +214,7 @@ def put_msgs_in_queue(input_queue, sock):
             break
         else:
             input_queue.put((new_msg, new_addr))
-            print(f"{new_msg[:10]} from {new_addr} added to input queue")
+            # print(f"{new_msg[:10]} from {new_addr} added to input queue")
 
 
 def move_from_input_to_output(input_queue, output_queue):
@@ -222,7 +222,7 @@ def move_from_input_to_output(input_queue, output_queue):
         msg, addr = input_queue.get()
         output_queue.put((msg, addr))
         input_queue.task_done()
-        print(f"{msg[:10]} from {addr} moved to output queue")
+        # print(f"{msg[:10]} from {addr} moved to output queue")
 
 
 def process_msgs(input_queue, conn_dict):
@@ -230,7 +230,7 @@ def process_msgs(input_queue, conn_dict):
         msg, addr = input_queue.get()
         conn_dict.handle(msg, addr)
         input_queue.task_done()
-        print(f"{msg[:10]} from {addr} processed, reply sent to output queue")
+        # print(f"{msg[:10]} from {addr} processed, reply sent to output queue")
 
 
 def send_whenever(output_queue, sock):
@@ -239,7 +239,7 @@ def send_whenever(output_queue, sock):
         msg, addr = output_queue.get()
         sock.sendto(msg, addr)
         output_queue.task_done()
-        print(f"{msg[:10]} to {addr} sent from output queue")
+        # print(f"{msg[:10]} to {addr} sent from output queue")
 
 
 def test_input_and_output_sending(server_port):
