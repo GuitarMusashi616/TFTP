@@ -7,7 +7,6 @@ class Connection:
     """
     def __init__(self, output_queue):
         self.state = Open(self)
-        self.type = None
         self.client_port = None
         self.file_path = None
         self.block_num = None

@@ -1,8 +1,16 @@
+# Austin Williams
+# Dr. Shawn Butler
+# Computer Networks
+# November 25, 2020
+
 from shared import *
 import os
 
 
 class ConnectionState:
+    """
+    Abstract class for states of the Connection instance, all states must have a startup and handle method
+    """
     def __init__(self, connection):
         self.connection = connection
 
@@ -15,7 +23,7 @@ class ConnectionState:
 
 class Open(ConnectionState):
     """
-    Initial Connection State for new Connection, yet to decide whether the connection to client will be a download or upload
+    Initial Connection State for new Connection, ready to start a download or an upload based on first message received.
     """
     def startup(self):
         pass  # todo: set variables back to None
@@ -24,14 +32,13 @@ class Open(ConnectionState):
         if msg[0:2] == RRQ:
             filename = extract_null_terminated_string(msg)
 
-            if not os.path.exists(filename) or not os.access(filename, os.R_OK):  # todo: replace with try except
+            if not os.path.exists(filename) or not os.access(filename, os.R_OK):
                 err_str = "filename does not exists or cannot be opened, try again"
                 err_msg = ERROR + Error.FILE_NOT_FOUND + err_str.encode() + NULL
                 self.connection.output_queue.put((err_msg, addr))
                 self.connection.state = Closed(self.connection)
                 return
 
-            self.connection.type = 'Upload'
             self.connection.file = open(filename, 'rb')
             self.connection.block_num = 1
             self.connection.addr = addr
@@ -49,7 +56,6 @@ class Open(ConnectionState):
                 self.connection.state = Closed(self.connection)
                 return
 
-            self.connection.type = 'Download'
             self.connection.file = open(filename, 'wb')
             self.connection.block_num = 0
             self.connection.addr = addr
@@ -57,6 +63,11 @@ class Open(ConnectionState):
 
 
 class Upload(ConnectionState):
+    """
+    State used while sending data to the client,
+    Queues the next up to 512 bytes of the file
+    Changes state to FinalUpload when less than 512 bytes remaining in file
+    """
     def startup(self):
         data_bytes = self.connection.file.read(512)
         block_num_bytes = short_to_bytes(self.connection.block_num)
@@ -72,6 +83,11 @@ class Upload(ConnectionState):
 
 
 class Download(ConnectionState):
+    """
+    State used while receiving data from the client,
+    Checks the Ack's block num and saves the data to a file
+    Changes state to FinalDownload when less than 512 bytes received
+    """
     def startup(self):
         ack_msg = ACK + short_to_bytes(self.connection.block_num)
         self.connection.output_queue.put((ack_msg, self.connection.addr))
@@ -87,16 +103,23 @@ class Download(ConnectionState):
 
 
 class FinalUpload(ConnectionState):
+    """
+    Accepts the final Ack and changes state to Closed to be deleted by the ConnectionDictionary
+    """
     def startup(self):
         pass
 
     def handle(self, msg, addr):
         if msg == ACK + short_to_bytes(self.connection.block_num):
             self.connection.block_num += 1
+            self.connection.file.close()
             self.connection.state = Closed(self.connection)
 
 
 class FinalDownload(ConnectionState):
+    """
+    Sends the final Ack, closes the file, and changes state to Closed to be deleted by the ConnectionDictionary
+    """
     def startup(self):
         ack_msg = ACK + short_to_bytes(self.connection.block_num)
         self.connection.output_queue.put((ack_msg, self.connection.addr))
@@ -115,11 +138,4 @@ class Closed(ConnectionState):
     def handle(self, msg, addr):
         pass
 
-
-class WaitForAck(ConnectionState):
-    pass
-
-
-class Shutdown(ConnectionState):
-    pass
 
