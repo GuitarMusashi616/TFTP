@@ -1,0 +1,5 @@
+2020-11-25 04:29:16,049: DEBUG: NEW RUN: Client, TEST: Read_Multiple_Clients_Two_Threads2
+2020-11-25 04:29:16,050: DEBUG: The client is starting.
+2020-11-25 04:29:16,050: DEBUG: The client is starting on port 43462
+2020-11-25 04:29:16,050: DEBUG: Sending shutdown command to server
+2020-11-25 04:29:16,050: DEBUG: Shutdown signal sent, shutting down

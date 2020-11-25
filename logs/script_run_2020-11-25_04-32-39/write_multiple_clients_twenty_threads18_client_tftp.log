@@ -1,0 +1,12 @@
+2020-11-25 04:33:44,017: DEBUG: NEW RUN: Client, TEST: Write_Multiple_Clients_Twenty_Threads18
+2020-11-25 04:33:44,017: DEBUG: The client is starting.
+2020-11-25 04:33:44,017: DEBUG: The client is starting on port 27036
+2020-11-25 04:33:44,017: DEBUG: Sent WRQ: b'\x00\x02/home/A365/tftp_threads/dist/read_files/thread_18.txt\x00netascii\x00'
+2020-11-25 04:33:44,018: DEBUG: File exists, can send it
+2020-11-25 04:33:44,019: DEBUG: First packet received. Raw bytes: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:33:44,019: DEBUG: New packet from: ('127.0.0.1', 49365), contents: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:33:44,019: DEBUG: Sending: /home/A365/tftp_threads/dist/read_files/thread_18.txt
+2020-11-25 04:33:44,019: ERROR: Shutting down due to error packet. Error code: 2, error message: b'filename already exists at destination'
+2020-11-25 04:33:44,019: WARNING: File didnt close on its own, closing now
+2020-11-25 04:33:44,119: DEBUG: Client finished.
+2020-11-25 04:33:44,119: DEBUG: Closing Socket

@@ -1,0 +1,12 @@
+2020-11-25 04:33:39,524: DEBUG: NEW RUN: Client, TEST: Write_Multiple_Clients_Ten_Threads10
+2020-11-25 04:33:39,524: DEBUG: The client is starting.
+2020-11-25 04:33:39,524: DEBUG: The client is starting on port 62617
+2020-11-25 04:33:39,525: DEBUG: Sent WRQ: b'\x00\x02shutdown.txt\x00netascii\x00'
+2020-11-25 04:33:39,527: DEBUG: File exists, can send it
+2020-11-25 04:33:39,527: DEBUG: First packet received. Raw bytes: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:33:39,527: DEBUG: Sending: shutdown.txt
+2020-11-25 04:33:39,527: DEBUG: New packet from: ('127.0.0.1', 26756), contents: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:33:39,548: ERROR: Shutting down due to error packet. Error code: 2, error message: b'filename already exists at destination'
+2020-11-25 04:33:39,548: WARNING: File didnt close on its own, closing now
+2020-11-25 04:33:39,628: DEBUG: Client finished.
+2020-11-25 04:33:39,628: DEBUG: Closing Socket
