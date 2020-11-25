@@ -39,12 +39,12 @@ class Open(ConnectionState):
 
         elif msg[0:2] == WRQ:
             filename = extract_null_terminated_string(msg)
-            if os.path.exists(filename):
-                err_str = "filename already exists at destination"
-                err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
-                self.connection.output_queue.put((err_msg, addr))
-                self.connection.state = Closed(self.connection)
-                return
+            # if os.path.exists(filename):
+            #     err_str = "filename already exists at destination"
+            #     err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
+            #     self.connection.output_queue.put((err_msg, addr))
+            #     self.connection.state = Closed(self.connection)
+            #     return
 
             self.connection.type = 'Download'
             self.connection.file = open(filename, 'wb')
