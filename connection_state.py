@@ -31,13 +31,17 @@ class Open(ConnectionState):
 
         elif msg[0:2] == WRQ:
             filename = extract_null_terminated_string(msg)
-            while os.path.exists(filename):
-                filename = increment_filename(filename)
-            self.connection.type = 'Download'
-            self.connection.file = open(filename, 'wb')
-            self.connection.block_num = 0
-            self.connection.addr = addr
-            self.connection.state = Download(self.connection)
+            if not os.path.exists(filename):
+                self.connection.type = 'Download'
+                self.connection.file = open(filename, 'wb')
+                self.connection.block_num = 0
+                self.connection.addr = addr
+                self.connection.state = Download(self.connection)
+            else:
+                err_str = "filename already exists at destination"
+                err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
+                self.connection.output_queue.put((err_msg, addr))
+                self.connection.state = Closed(self.connection)
 
 
 class Upload(ConnectionState):

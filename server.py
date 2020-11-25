@@ -123,16 +123,30 @@ def send_examples_for_test(msgs_to_send=write_request_msgs):
     s.close()
 
 
-def send_examples_from_file(filename='example_client.txt'):
-    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
-        s.bind(('', 12345))
-        with open(filename, 'r') as file:
-            for line in file.readlines():
-                msg = bytes(line.strip())
-                s.sendto(msg, ('127.0.0.1', 54321))
+def test_file_doesnt_exist():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('', 12345))
+    s.settimeout(1000)
+
+    msg = ReadRequest('doesnt_exists.txt')
+    addr = ('127.0.0.1', 54321)
+
+    s.sendto(bytes(msg), addr)
+
+
+def test_file_exists():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('', 12345))
+    s.settimeout(1000)
+
+    msg = WriteRequest('text.txt')
+    addr = ('127.0.0.1', 54321)
+
+    s.sendto(bytes(msg), addr)
 
 
 if __name__ == '__main__':
     # args = setup_args()
     # wait_for_clients(54321)
-    send_examples_for_test(read_request_msgs)
+    # send_examples_for_test(read_request_msgs)
+    test_file_exists()
