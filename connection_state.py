@@ -24,8 +24,8 @@ class Open(ConnectionState):
         if msg[0:2] == RRQ:
             filename = extract_null_terminated_string(msg)
 
-            if not os.path.exists(filename):  # todo: replace with try except
-                err_str = "filename does not correspond to a file saved on the server, try again"
+            if not os.path.exists(filename) or not os.access(filename, os.R_OK):  # todo: replace with try except
+                err_str = "filename does not exists or cannot be opened, try again"
                 err_msg = ERROR + Error.FILE_NOT_FOUND + err_str.encode() + NULL
                 self.connection.output_queue.put((err_msg, addr))
                 self.connection.state = Closed(self.connection)
@@ -39,12 +39,15 @@ class Open(ConnectionState):
 
         elif msg[0:2] == WRQ:
             filename = extract_null_terminated_string(msg)
-            # if os.path.exists(filename):
-            #     err_str = "filename already exists at destination"
-            #     err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
-            #     self.connection.output_queue.put((err_msg, addr))
-            #     self.connection.state = Closed(self.connection)
-            #     return
+            if filename[:40] == '/home/A365/tftp_threads/dist/read_files/':
+                filename = '/home/students/amwilliams24/pycharm/TFTP/' + filename[40:]
+
+            if os.path.exists(filename):
+                err_str = "filename already exists at destination"
+                err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
+                self.connection.output_queue.put((err_msg, addr))
+                self.connection.state = Closed(self.connection)
+                return
 
             self.connection.type = 'Download'
             self.connection.file = open(filename, 'wb')
