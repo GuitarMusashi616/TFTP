@@ -146,7 +146,5 @@ def test_file_exists():
 
 
 if __name__ == '__main__':
-    # args = setup_args()
-    # wait_for_clients(54321)
-    # send_examples_for_test(read_request_msgs)
-    test_file_exists()
+    send_examples_for_test(read_request_msgs)
+    # test_file_exists()

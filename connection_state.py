@@ -6,6 +6,12 @@ class ConnectionState:
     def __init__(self, connection):
         self.connection = connection
 
+    def startup(self):
+        raise NotImplementedError
+
+    def handle(self, msg, addr):
+        raise NotImplementedError
+
 
 class Open(ConnectionState):
     """
@@ -46,10 +52,12 @@ class Open(ConnectionState):
 
 class Upload(ConnectionState):
     def startup(self):
-        data_bytes = self.connection.file.read(508)
+        data_bytes = self.connection.file.read(512)
         block_num_bytes = short_to_bytes(self.connection.block_num)
         data_msg = DATA + block_num_bytes + data_bytes
         self.connection.output_queue.put((data_msg, self.connection.addr))
+        if len(data_msg) < 516:
+            self.connection.state = FinalUpload(ConnectionState)
 
     def handle(self, msg, addr):
         if msg == ACK + short_to_bytes(self.connection.block_num):
@@ -66,10 +74,20 @@ class Download(ConnectionState):
     def handle(self, msg, addr):
         if msg and msg[2:4] == short_to_bytes(self.connection.block_num):
             self.connection.file.write(msg[4:])
-            if len(msg) < 512:
+            if len(msg) < 516:
                 self.connection.state = FinalDownload(self.connection)
             else:
                 self.connection.state = Download(self.connection)
+
+
+class FinalUpload(ConnectionState):
+    def startup(self):
+        pass
+
+    def handle(self, msg, addr):
+        if msg == ACK + short_to_bytes(self.connection.block_num):
+            self.connection.block_num += 1
+            self.connection.state = Closed(self.connection)
 
 
 class FinalDownload(ConnectionState):
@@ -80,7 +98,7 @@ class FinalDownload(ConnectionState):
         self.connection.file.close()
         self.connection.state = Closed(self.connection)
 
-    def handle(self):
+    def handle(self, msg, addr):
         pass
 
 
@@ -88,7 +106,7 @@ class Closed(ConnectionState):
     def startup(self):
         pass
 
-    def handle(self):
+    def handle(self, msg, addr):
         pass
 
 
