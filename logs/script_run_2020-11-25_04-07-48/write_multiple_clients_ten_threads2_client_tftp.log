@@ -1,0 +1,12 @@
+2020-11-25 04:08:20,889: DEBUG: NEW RUN: Client, TEST: Write_Multiple_Clients_Ten_Threads2
+2020-11-25 04:08:20,890: DEBUG: The client is starting.
+2020-11-25 04:08:20,890: DEBUG: The client is starting on port 40304
+2020-11-25 04:08:20,890: DEBUG: Sent WRQ: b'\x00\x02/home/A365/tftp_threads/dist/read_files/thread_2.txt\x00netascii\x00'
+2020-11-25 04:08:20,892: DEBUG: File exists, can send it
+2020-11-25 04:08:20,892: DEBUG: First packet received. Raw bytes: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:08:20,892: DEBUG: New packet from: ('127.0.0.1', 57670), contents: b'\x00\x05\x00\x02filename already exists at destination\x00'
+2020-11-25 04:08:20,892: DEBUG: Sending: /home/A365/tftp_threads/dist/read_files/thread_2.txt
+2020-11-25 04:08:20,893: ERROR: Shutting down due to error packet. Error code: 2, error message: b'filename already exists at destination'
+2020-11-25 04:08:20,893: WARNING: File didnt close on its own, closing now
+2020-11-25 04:08:20,993: DEBUG: Client finished.
+2020-11-25 04:08:20,993: DEBUG: Closing Socket

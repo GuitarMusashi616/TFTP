@@ -1,0 +1,13 @@
+2020-11-25 04:07:58,825: DEBUG: NEW RUN: Client, TEST: Read_Multiple_Clients_Five_Threads1
+2020-11-25 04:07:58,825: DEBUG: The client is starting.
+2020-11-25 04:07:58,825: DEBUG: The client is starting on port 17881
+2020-11-25 04:07:58,825: DEBUG: Sent RRQ: b'\x00\x01/home/A365/tftp_threads/dist/read_files/thread_1.txt\x00netascii\x00'
+2020-11-25 04:07:58,827: DEBUG: First packet received. Raw bytes: b'\x00\x03\x00\x01Begin thread file for thread 1\nLorem ipsum dolor sit amet, ea unum definitiones mel, quo case explicari deseruisse id. Patrioque adipiscing vituperatoribus vis ex, pro alia volutpat corrumpit te, id magna melius est. Usu sanctus conceptam ad, in duo soleat dicunt dignissim, his facete ceteros albucius an. No latine prompta pro, vim eu option iuvaret vivendo. Movet epicuri aliquando et sea, eam id iudico principes accommodare, eam novum veritus vivendo at. Qui id facer facilisi mediocrem, duo eligendi of'
+2020-11-25 04:07:58,827: DEBUG: New packet from: ('127.0.0.1', 54816), contents: b'\x00\x03\x00\x01Begin thread file for thread 1\nLorem ipsum dolor sit amet, ea unum definitiones mel, quo case explicari deseruisse id. Patrioque adipiscing vituperatoribus vis ex, pro alia volutpat corrumpit te, id magna melius est. Usu sanctus conceptam ad, in duo soleat dicunt dignissim, his facete ceteros albucius an. No latine prompta pro, vim eu option iuvaret vivendo. Movet epicuri aliquando et sea, eam id iudico principes accommodare, eam novum veritus vivendo at. Qui id facer facilisi mediocrem, duo eligendi of'
+2020-11-25 04:07:58,828: DEBUG: Receiving /home/students/amwilliams24/pycharm/TFTP/thread_1.txt
+2020-11-25 04:07:58,828: DEBUG: Making ACK to packet: 1
+2020-11-25 04:07:58,828: DEBUG: Sending ACK #1
+2020-11-25 04:07:58,828: DEBUG: File /home/A365/tftp_threads/dist/read_files/thread_1.txt received. Saved as /home/students/amwilliams24/pycharm/TFTP/thread_1.txt - Now shutting down.
+2020-11-25 04:07:58,828: DEBUG: New packet from: ('127.0.0.1', 54816), contents: b'\x00\x03\x00\x02ficiis et.\n\nIus cu vocent docendi conclusionemque, vis decore possit repudiandae ea. Mel eu veritus denique voluptatibus, cibo quando copiosae sea ex, inermis mnesarchum cum an. Mei facilis repudiandae cu. Vel posse iuvaret referrentur ei, pro eius malorum assentior cu. Vim affert iuvaret sapientem ea, ad duo labores complectitur interpretaris, sea ex utinam partiendo.\n\nScaevola euripidis eu eam, percipit interpretaris no sea. Ut mea cibo magna gloriatur. Et velit appareat ius. At duo affert tollit luci'
+2020-11-25 04:07:58,929: DEBUG: Client finished.
+2020-11-25 04:07:58,929: DEBUG: Closing Socket
