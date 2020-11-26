@@ -1,3 +1,8 @@
+# Austin Williams
+# Dr. Shawn Butler
+# Computer Networks
+# November 25, 2020
+
 from connection_state import *
 
 
@@ -7,8 +12,8 @@ class Connection:
     """
     def __init__(self, output_queue):
         self.state = Open(self)
-        self.client_port = None
-        self.file_path = None
+        self.file = None
+        self.addr = None
         self.block_num = None
         self.output_queue = output_queue
 

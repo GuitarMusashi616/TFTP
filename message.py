@@ -8,8 +8,6 @@
 
 from shared import *
 
-TIMEOUT = 3
-
 
 class Message:
     """

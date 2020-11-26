@@ -1,3 +1,8 @@
+# Austin Williams
+# Dr. Shawn Butler
+# Computer Networks
+# November 25, 2020
+
 import threading
 from connection import *
 

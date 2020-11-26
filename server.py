@@ -110,7 +110,7 @@ read_request_msgs = [
     ]
 
 
-def send_examples_for_test(msgs_to_send=write_request_msgs):
+def send_examples_for_test(msgs_to_send):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.bind(('', 12345))
     s.settimeout(1000)
@@ -147,4 +147,3 @@ def test_file_exists():
 
 if __name__ == '__main__':
     send_examples_for_test(read_request_msgs)
-    # test_file_exists()

@@ -4,6 +4,7 @@
 # November 25, 2020
 
 from shared import *
+from config import *
 import os
 
 
@@ -69,11 +70,11 @@ class Upload(ConnectionState):
     Changes state to FinalUpload when less than 512 bytes remaining in file
     """
     def startup(self):
-        data_bytes = self.connection.file.read(512)
+        data_bytes = self.connection.file.read(MAX_PACKET_SIZE-4)
         block_num_bytes = short_to_bytes(self.connection.block_num)
         data_msg = DATA + block_num_bytes + data_bytes
         self.connection.output_queue.put((data_msg, self.connection.addr))
-        if len(data_msg) < 516:
+        if len(data_msg) < MAX_PACKET_SIZE:
             self.connection.state = FinalUpload(self.connection)
 
     def handle(self, msg, addr):
@@ -96,7 +97,7 @@ class Download(ConnectionState):
     def handle(self, msg, addr):
         if msg and msg[2:4] == short_to_bytes(self.connection.block_num):
             self.connection.file.write(msg[4:])
-            if len(msg) < 516:
+            if len(msg) < MAX_PACKET_SIZE:
                 self.connection.state = FinalDownload(self.connection)
             else:
                 self.connection.state = Download(self.connection)

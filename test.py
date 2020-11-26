@@ -1,18 +1,13 @@
+# Austin Williams
+# Dr. Shawn Butler
+# Computer Networks
+# November 25, 2020
+
 import pytest
-import threading
-import socket
 import random
 import time
-import os
-from queue import Queue
-from shared import *
-from message import *
-from connection import *
 from connection_dict import *
-from concurrent.futures import ThreadPoolExecutor
-
-TIMEOUT = 3
-VERBOSE = False
+from tftp_server import *
 
 
 def single_client():
@@ -28,7 +23,7 @@ def single_server():
     server_port = 54321
     s.bind(('', server_port))
 
-    msg, addr = s.recvfrom(2048)
+    msg, addr = s.recvfrom(MAX_PACKET_SIZE)
     assert msg == b'TestTestTest'
 
 
@@ -43,17 +38,10 @@ def test_client_access():
     t2.join()
 
 
-def setup_server(server_port=54321):
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.bind(('', server_port))
-    s.settimeout(TIMEOUT)
-    return s
-
-
 def server_to_queue(s, queue, queue_lock):
     messages = 5
     while messages:
-        msg, addr = s.recvfrom(2048)
+        msg, addr = s.recvfrom(MAX_PACKET_SIZE)
         queue_lock.acquire()
         queue.append(msg)
         queue_lock.release()
@@ -93,7 +81,7 @@ def test_locking():
 def server_to_file(s):
     with open("text.txt", 'a') as file:
         while True:
-            msg, addr = s.recvfrom(2048)
+            msg, addr = s.recvfrom(MAX_PACKET_SIZE)
             file.write(str(msg))
             file.write(' - ')
             file.write(str(addr))
@@ -108,36 +96,39 @@ def main_server_to_file():
 
 
 def test_connection_state():
-    read_request, addr_1 = bytes()
-    write_request, addr_2 = bytes()
-    msg_1, addr_1 = bytes()
-    msg_2, addr_2 = bytes()
+    msg_1, addr_1 = bytes(ReadRequest('text.txt')), ('127.0.0.1', 12345)
+    msg_2, addr_2 = bytes(WriteRequest('text.txt')), ('127.0.0.1', 12345)
 
-    client_1 = Connection()
-    client_2 = Connection()
+    output_queue = Queue()
+
+    client_1 = Connection(output_queue)
+    client_2 = Connection(output_queue)
 
     client_1.handle(msg_1, addr_1)  # processes msg and responds to the client, sends data and waits for acks
     client_2.handle(msg_2, addr_2)  # sends ack and waits for more data
 
+    assert isinstance(client_1.state, Upload)
+    assert isinstance(client_2.state, Download)
+
 
 def test_single_connection_with_server():
-    args = setup_args()
-    client_1 = Connection()
+    output_queue = Queue()
+    client_1 = Connection(output_queue)
 
     with setup_server(args.server_port) as s:
         while True:
-            msg, addr = s.recvfrom(2048)
+            msg, addr = s.recvfrom(MAX_PACKET_SIZE)
             client_1.handle(msg, addr)
 
 
 def test_init_state_transition():
     msg_1 = ReadRequest('text.txt', 'netascii')
     addr_1 = ('127.0.0.1', 12345)
+    output_1 = Queue()
 
-    client_1 = Connection()
+    client_1 = Connection(output_1)
     client_1.handle(bytes(msg_1), addr_1)
 
-    assert client_1.type == "Upload"
     assert isinstance(client_1.state, Upload)
 
 
@@ -163,7 +154,7 @@ def send_responses(output_queue, input_queue, sock):
         print(msg, addr)
         sock.sendto(msg, addr)
 
-        new_msg, new_addr = sock.recvfrom(2048)
+        new_msg, new_addr = sock.recvfrom(MAX_PACKET_SIZE)
         input_queue.put((new_msg, addr))
 
 
@@ -208,23 +199,6 @@ def test_threads():
     print(input_queue.queue)
 
 
-def put_msgs_in_queue(input_queue, sock):
-    is_open = True
-    shutdown_msg = ReadRequest('shutdown.txt')
-    while is_open:
-        try:
-            new_msg, new_addr = sock.recvfrom(516)
-        except (ConnectionResetError, socket.timeout):
-            print('No more new messages')
-            break
-        else:
-            if new_msg == bytes(shutdown_msg):
-                is_open = False
-            input_queue.put((new_msg, new_addr))
-            if VERBOSE:
-                print("{} from {} added to input queue".format(new_msg[:10], new_addr))
-
-
 def move_from_input_to_output(input_queue, output_queue):
     while True:
         msg, addr = input_queue.get()
@@ -232,49 +206,6 @@ def move_from_input_to_output(input_queue, output_queue):
         input_queue.task_done()
         if VERBOSE:
             print("{} from {} moved to output queue".format(msg[:10], addr))
-
-
-def process_msgs(input_queue, conn_dict):
-    while True:
-        msg, addr = input_queue.get()
-        conn_dict.handle(msg, addr)
-        input_queue.task_done()
-        if VERBOSE:
-            print("{} from {} processed, reply sent to output queue".format(msg[:10], addr))
-
-
-def send_whenever(output_queue, sock):
-    """Thread that waits for messages then sends them once they enter the output queue"""
-    while True:
-        msg, addr = output_queue.get()
-        sock.sendto(msg, addr)
-        output_queue.task_done()
-        if VERBOSE:
-            print("{} to {} sent from output queue".format(msg[:10], addr))
-
-
-def test_input_and_output_sending(server_port):
-    """Make thread that sends whenever a message is received"""
-    sock = setup_server(server_port)
-
-    output_queue = Queue()
-    input_queue = Queue()
-
-    conn_dict = ConnectionDict(output_queue)
-
-    t_receive = threading.Thread(target=put_msgs_in_queue, args=(input_queue, sock), daemon=True)
-    t_process = threading.Thread(target=process_msgs, args=(input_queue, conn_dict), daemon=True)
-    t_send = threading.Thread(target=send_whenever, args=(output_queue, sock), daemon=True)
-
-    t_receive.start()
-    t_process.start()
-    t_send.start()
-
-    t_receive.join()
-    t_process.join()
-    t_send.join()
-
-    sock.close()
 
 
 def test_duo_connection():
@@ -301,7 +232,4 @@ def test_duo_connection():
         conn_2.handle(new_msg, new_addr)
 
 
-if __name__ == "__main__":
-    args = setup_args()
-    # args.server_port = 54321
-    test_input_and_output_sending(args.server_port)
+
