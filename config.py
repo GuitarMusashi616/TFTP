@@ -4,5 +4,5 @@
 # November 25, 2020
 
 TIMEOUT = 3
-VERBOSE = True
+VERBOSE = False
 MAX_PACKET_SIZE = 516
