@@ -4,232 +4,121 @@
 # November 25, 2020
 
 import pytest
-import random
-import time
-from connection_dict import *
-from tftp_server import *
+from message import *
+from queue import Queue
+from connection import *
 
 
-def single_client():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_port = 54321
-    port = random.randint(5000, 6000)
-    s.bind(('', port))
-    s.sendto(b'TestTestTest', ('127.0.0.1', server_port))
+@pytest.fixture
+def client_upload():
+    return [
+        b'\x00\x02text.txt\x00netascii\x00',
+        b'\x00\x03\x00\x01from django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.mo',
+        b'\x00\x03\x00\x02dels import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom d',
+        b'\x00\x03\x00\x03jango.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, Licens',
+        b'\x00\x03\x00\x04ingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Catego',
+        b'\x00\x03\x00\x05ry, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, Ver',
+        b'\x00\x03\x00\x06ificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\n\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntry\r\nv\r\nfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Indu',
+        b'\x00\x03\x00\x07stry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Projec',
+        b'\x00\x03\x00\x08t, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .mo',
+        b'\x00\x03\x00\tdels import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import url',
+        b'\x00\x03\x00\nencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.uti',
+        b'\x00\x03\x00\x0bls.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r',
+        b'\x00\x03\x00\x0c\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html i',
+        b'\x00\x03\x00\rmport format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom d',
+        b'\x00\x03\x00\x0ejango.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models imp',
+        b'\x00\x03\x00\x0fort LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contrib.admin.models import LogEntryfrom django.utils.html import format_html\r\n\r\nfrom django.utils.http import urlencode\r\n\r\nfrom .models import Project, File, Tag, Industry, Client, Employee, VerificationLevel, Category, FileType, LicensingAgreement\r\n\r\nfrom django.contri',
+        b'\x00\x03\x00\x10b.admin.models import LogEntry\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n',
+    ]
 
 
-def single_server():
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    server_port = 54321
-    s.bind(('', server_port))
-
-    msg, addr = s.recvfrom(MAX_PACKET_SIZE)
-    assert msg == b'TestTestTest'
-
-
-def test_client_access():
-    t1 = threading.Thread(target=single_server)
-    t2 = threading.Thread(target=single_client)
-
-    t1.start()
-    t2.start()
-
-    t1.join()
-    t2.join()
-
-
-def server_to_queue(s, queue, queue_lock):
-    messages = 5
-    while messages:
-        msg, addr = s.recvfrom(MAX_PACKET_SIZE)
-        queue_lock.acquire()
-        queue.append(msg)
-        queue_lock.release()
-        messages -= 1
-    print("shutting down")
+@pytest.fixture
+def client_download():
+    return [
+        b'\x00\x01text.txt\x00netascii\x00',
+        b'\x00\x04\x00\x01',
+        b'\x00\x04\x00\x02',
+        b'\x00\x04\x00\x03',
+        b'\x00\x04\x00\x04',
+        b'\x00\x04\x00\x05',
+        b'\x00\x04\x00\x06',
+        b'\x00\x04\x00\x07',
+        b'\x00\x04\x00\x08',
+        b'\x00\x04\x00\x09',
+        b'\x00\x04\x00\x0a',
+        b'\x00\x04\x00\x0b',
+        b'\x00\x04\x00\x0c',
+        b'\x00\x04\x00\x0d',
+        b'\x00\x04\x00\x0e',
+        b'\x00\x04\x00\x0f',
+        b'\x00\x04\x00\x10',
+    ]
 
 
-def queue_to_client(queue, queue_lock):
-    messages = 100
-    while messages:
-        time.sleep(.1)
-        queue_lock.acquire()
-        if queue:
-            print(queue.pop())
-        queue_lock.release()
-        messages -= 1
+def test_packet_types():
+    rrq = ReadRequest('text.txt')
+    wrq = WriteRequest('text.txt')
+    dm = DataMessage(1, b'Lorem Ipsum Dolor')
+    ack = AckMessage(1)
+    err = ErrorMessage(Error.FILE_NOT_FOUND, 'File not found')
+
+    assert bytes(rrq) == b'\x00\x01text.txt\x00netascii\x00'
+    assert bytes(wrq) == b'\x00\x02text.txt\x00netascii\x00'
+    assert bytes(dm) == b'\x00\x03\x00\x01Lorem Ipsum Dolor'
+    assert bytes(ack) == b'\x00\x04\x00\x01'
+    assert bytes(err) == b'\x00\x05\x00\x01File not found\x00'
 
 
-def test_locking():
-    s = setup_server()
-    queue = []
-    queue_lock = threading.Lock()
-    t1 = threading.Thread(target=server_to_queue, args=(s, queue, queue_lock))
-    t2 = threading.Thread(target=queue_to_client, args=(queue, queue_lock))
-    t3 = threading.Thread(target=server_to_queue, args=(s, queue, queue_lock))
-    t4 = threading.Thread(target=server_to_queue, args=(s, queue, queue_lock))
+@pytest.mark.parametrize("filename", [b'text.txt', 12])
+@pytest.mark.parametrize("block_num", [b'read.csv', 10000, 'string'])
+@pytest.mark.parametrize("byte_str", ['', 12345, 'file'])
+def test_packet_types_2(filename, block_num, byte_str):
+    with pytest.raises(TypeError):
+        rrq = ReadRequest(filename)
+        wrq = WriteRequest(filename)
+        dm = DataMessage(block_num, b'123')
+        ack = AckMessage(block_num)
+        err = ErrorMessage(Error.FILE_NOT_FOUND, filename)
 
-    t1.start()
-    t2.start()
-    t3.start()
-    t4.start()
-
-    for _ in range(15):
-        threading.Thread(target=single_client).start()
+    with pytest.raises(TypeError):
+        dm = DataMessage(1, byte_str)
+        err = ErrorMessage(byte_str, 'File not found')
 
 
-def server_to_file(s):
-    with open("text.txt", 'a') as file:
-        while True:
-            msg, addr = s.recvfrom(MAX_PACKET_SIZE)
-            file.write(str(msg))
-            file.write(' - ')
-            file.write(str(addr))
-            file.write('\n')
-
-
-def main_server_to_file():
-    args = setup_args()
-    os.remove("text.txt")
-    s = setup_server(args.server_port)
-    server_to_file(s)
-
-
-def test_connection_state():
-    msg_1, addr_1 = bytes(ReadRequest('text.txt')), ('127.0.0.1', 12345)
-    msg_2, addr_2 = bytes(WriteRequest('text.txt')), ('127.0.0.1', 12345)
-
+def test_download_output(client_download):
+    input_queue = Queue()
     output_queue = Queue()
+    addr = ('127.0.0.1', 12345)
+    for packet in client_download:
+        input_queue.put((packet, addr))
 
-    client_1 = Connection(output_queue)
-    client_2 = Connection(output_queue)
+    conn = Connection(output_queue)
+    assert isinstance(conn.state, Open)
 
-    client_1.handle(msg_1, addr_1)  # processes msg and responds to the client, sends data and waits for acks
-    client_2.handle(msg_2, addr_2)  # sends ack and waits for more data
+    conn.handle(*input_queue.get())
+    assert isinstance(conn.state, Upload)
 
-    assert isinstance(client_1.state, Upload)
-    assert isinstance(client_2.state, Download)
-
-
-def test_single_connection_with_server():
-    output_queue = Queue()
-    client_1 = Connection(output_queue)
-
-    with setup_server(args.server_port) as s:
-        while True:
-            msg, addr = s.recvfrom(MAX_PACKET_SIZE)
-            client_1.handle(msg, addr)
-
-
-def test_init_state_transition():
-    msg_1 = ReadRequest('text.txt', 'netascii')
-    addr_1 = ('127.0.0.1', 12345)
-    output_1 = Queue()
-
-    client_1 = Connection(output_1)
-    client_1.handle(bytes(msg_1), addr_1)
-
-    assert isinstance(client_1.state, Upload)
-
-
-def handle_msgs(input_queue, output_queue, client_dict, client_dict_lock):
     while input_queue.queue:
-        msg, addr = input_queue.get()
-        print(msg, addr)
-
-        client_dict_lock.acquire()
-        if addr not in client_dict:
-            client_dict[addr] = [Connection(output_queue), threading.Lock()]
-        connection, connection_lock = client_dict[addr]
-        client_dict_lock.release()
-
-        connection_lock.acquire()
-        connection.handle(msg, addr)
-        connection_lock.release()
+        conn.handle(*input_queue.get())
 
 
-def send_responses(output_queue, input_queue, sock):
-    while output_queue.queue:
-        msg, addr = output_queue.get()
-        print(msg, addr)
-        sock.sendto(msg, addr)
-
-        new_msg, new_addr = sock.recvfrom(MAX_PACKET_SIZE)
-        input_queue.put((new_msg, addr))
-
-
-def test_read_doing_stuff():
-    sock = setup_server()
-
-    addr_1 = ('127.0.0.1', 22345)
-    addr_2 = ('127.0.0.1', 32345)
-    addr_3 = ('127.0.0.1', 42345)
-
-    output_queue = Queue()
-    input_queue = Queue()
-    input_queue.put((bytes(ReadRequest('text.txt')), addr_1))
-    input_queue.put((bytes(WriteRequest('text.txt')), addr_2))
-    input_queue.put((bytes(ReadRequest('text.txt')), addr_3))
-
-    # spin up new thread whenever new client port is found
-    client_dict = {}
-    client_dict_lock = threading.Lock()
-
-    handle_msgs(input_queue, output_queue, client_dict, client_dict_lock)
-    send_responses(output_queue, input_queue, sock)
-    print(input_queue.queue)
-
-
-def test_threads():
-    sock = setup_server()
-
-    output_queue = Queue()
-    input_queue = Queue()
-
-    t_receive = threading.Thread(target=put_msgs_in_queue, args=(input_queue, sock), daemon=True)
-    t_receive.start()
-
-    # spin up new thread whenever new client port is found
-    client_dict = {}
-    client_dict_lock = threading.Lock()
-
-    handle_msgs(input_queue, output_queue, client_dict, client_dict_lock)
-    send_responses(output_queue, input_queue, sock)
-
-    print(input_queue.queue)
-
-
-def move_from_input_to_output(input_queue, output_queue):
-    while True:
-        msg, addr = input_queue.get()
-        output_queue.put((msg, addr))
-        input_queue.task_done()
-        if VERBOSE:
-            print("{} from {} moved to output queue".format(msg[:10], addr))
-
-
-def test_duo_connection():
-    """Two Connection instances talking to each other"""
+def test_upload_output(client_upload):
     input_queue = Queue()
     output_queue = Queue()
+    addr = ('127.0.0.1', 12345)
+    for packet in client_upload:
+        input_queue.put((packet, addr))
 
-    conn_1 = Connection(output_queue)
-    conn_2 = Connection(input_queue)
+    conn = Connection(output_queue)
+    assert isinstance(conn.state, Open)
 
-    msg, addr = bytes(WriteRequest('text.txt')), ('127.0.0.1', 12345)
-    input_queue.put((msg, addr))
+    conn.handle(*input_queue.get())
+    assert isinstance(conn.state, Closed)  # File exists, close connection
 
-    new_msg, new_addr = bytes(ReadRequest('text.txt')), ('127.0.0.1', 12345)
-    conn_2.handle(new_msg, new_addr)
 
-    while True:
-        msg, addr = input_queue.get(timeout=3)
-        print(msg[:10], addr)
-        conn_1.handle(msg, addr)
 
-        new_msg, new_addr = output_queue.get(timeout=3)
-        print(new_msg[:10], new_addr)
-        conn_2.handle(new_msg, new_addr)
+
+
 
 
 

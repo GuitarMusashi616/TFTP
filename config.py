@@ -3,6 +3,6 @@
 # Computer Networks
 # November 25, 2020
 
-TIMEOUT = 3
+TIMEOUT = 20
 VERBOSE = False
 MAX_PACKET_SIZE = 516
