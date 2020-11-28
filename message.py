@@ -76,10 +76,10 @@ class ErrorMessage(Message):
     """
     Used to quickly construct an error request
     """
-    def __init__(self, error_code: int, error_msg: str):
+    def __init__(self, error_code: bytes, error_msg: str):
         super().__init__(5)
         self.error_code = error_code
         self.error_msg = error_msg
 
     def __bytes__(self):
-        return short_to_bytes(self.opcode) + short_to_bytes(self.error_code) + self.error_msg.encode() + NULL
+        return short_to_bytes(self.opcode) + self.error_code + self.error_msg.encode() + NULL
