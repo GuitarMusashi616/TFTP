@@ -5,6 +5,7 @@
 
 from shared import *
 from config import *
+from message import *
 import os
 
 
@@ -34,9 +35,8 @@ class Open(ConnectionState):
             filename = extract_null_terminated_string(msg)
 
             if not os.path.exists(filename) or not os.access(filename, os.R_OK):
-                err_str = "filename does not exists or cannot be opened, try again"
-                err_msg = ERROR + Error.FILE_NOT_FOUND + err_str.encode() + NULL
-                self.connection.output_queue.put((err_msg, addr))
+                err_msg = ErrorMessage(Error.FILE_NOT_FOUND, "filename does not exist or cannot be opened, try again")
+                self.connection.output_queue.put((bytes(err_msg), addr))
                 self.connection.state = Closed(self.connection)
                 return
 
@@ -51,9 +51,8 @@ class Open(ConnectionState):
                 filename = '/home/students/amwilliams24/pycharm/TFTP/' + filename[40:]
 
             if os.path.exists(filename):
-                err_str = "filename already exists at destination"
-                err_msg = ERROR + Error.ACCESS_VIOLATION + err_str.encode() + NULL
-                self.connection.output_queue.put((err_msg, addr))
+                err_msg = ErrorMessage(Error.ACCESS_VIOLATION, "filename already exists at destination")
+                self.connection.output_queue.put((bytes(err_msg), addr))
                 self.connection.state = Closed(self.connection)
                 return
 
@@ -61,6 +60,11 @@ class Open(ConnectionState):
             self.connection.block_num = 0
             self.connection.addr = addr
             self.connection.state = Download(self.connection)
+        else:
+            # ERRORs are handled by higher Connection layer
+            err_msg = ErrorMessage(Error.UNKNOWN_TID, "Unknown TID, first packet must be a read or write request")
+            self.connection.output_queue.put((bytes(err_msg), addr))
+            self.connection.state = Closed(self.connection)
 
 
 class Upload(ConnectionState):
@@ -133,6 +137,9 @@ class FinalDownload(ConnectionState):
 
 
 class Closed(ConnectionState):
+    """
+    Gets deleted by the parent ConnectionDictionary layer
+    """
     def startup(self):
         pass
 

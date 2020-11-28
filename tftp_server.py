@@ -19,6 +19,10 @@ def setup_server(server_port=54321):
 
 
 def put_msgs_in_queue(input_queue, sock):
+    """
+    Listens to incoming messages for socket
+    Puts messages into the thread safe queue
+    """
     is_open = True
     shutdown_msg = ReadRequest('shutdown.txt')
     while is_open:
@@ -36,6 +40,12 @@ def put_msgs_in_queue(input_queue, sock):
 
 
 def process_msgs(input_queue, conn_dict):
+    """
+    Takes messages from input queue,
+    Passes message to Connection Dictionary which passes message to Connection
+    Connection passes message to Connection State.
+    Connection State puts response in output queue
+    """
     while True:
         msg, addr = input_queue.get()
         conn_dict.handle(msg, addr)
@@ -80,5 +90,4 @@ def start_threaded_server(server_port):
 
 if __name__ == "__main__":
     args = setup_args()
-    args.server_port = 54321
     start_threaded_server(args.server_port)

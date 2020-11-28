@@ -4,7 +4,6 @@
 # 2 October 2020
 
 import socket
-from shared import *
 from message import *
 
 

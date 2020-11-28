@@ -21,14 +21,29 @@ class Connection:
         self.state.startup()
 
     def handle(self, msg, addr):
+        """
+        If Error: shut down the connection (if client port is new then creates and destroys same connection)
+        Else: pass the message and address down to the Connection's State
+        """
+        if msg[0:2] == ERROR:
+            if self.file:
+                self.file.close()
+            self.state = Closed(self)
+            return
         self.state.handle(msg, addr)
 
     @property
     def state(self):
+        """
+        Makes state a public property used by the Connection's State instances to swap states
+        """
         return self._state
 
     @state.setter
     def state(self, value):
+        """
+        When Changing state the State's startup method is called
+        """
         self._state = value
         self.startup()
 
