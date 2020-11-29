@@ -48,7 +48,7 @@ class Open(ConnectionState):
         elif msg[0:2] == WRQ:
             filename = extract_null_terminated_string(msg)
             if filename[:40] == '/home/A365/tftp_threads/dist/read_files/':
-                filename = '/home/students/amwilliams24/pycharm/TFTP/' + filename[40:]
+                filename = os.getcwd() + filename[39:]
 
             if os.path.exists(filename):
                 err_msg = ErrorMessage(Error.ACCESS_VIOLATION, "filename already exists at destination")
